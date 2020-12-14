@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package pb;
+
+// The Todo service definition.
+service Todo {
+  rpc List(ListRequest) returns (ListResponse);
+  rpc Get(GetRequest) returns (GetResponse);
+  rpc Post(PostRequest) returns (PostResponse);
+  rpc Complete(CompleteRequest) returns (CompleteResponse);
+  rpc ClearComplete(ClearCompleteRequest) returns (ClearCompleteResponse);
+}
+
+message ModelTodo {
+  string id = 1;
+  string created_at = 2;
+  string updated_at = 3;
+  string text = 4;
+  bool complete = 5 ;
+}
+
+message ListRequest {
+
+}
+
+message ListResponse {
+  repeated ModelTodo res = 1;
+  string err = 2;
+}
+
+message GetRequest {
+  string id = 1;
+}
+
+message GetResponse {
+  ModelTodo res = 1;
+  string err = 2;
+}
+
+message PostRequest {
+  ModelTodo todo = 1;
+}
+
+message PostResponse {
+  ModelTodo res = 1;
+  string err = 2;
+}
+
+message CompleteRequest {
+  string id = 1;
+}
+
+message CompleteResponse {
+  string err = 1;
+}
+
+message ClearCompleteRequest {
+
+}
+
+message ClearCompleteResponse {
+  string err = 1;
+}

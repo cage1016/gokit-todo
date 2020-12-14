@@ -1,0 +1,40 @@
+{
+  "service": {
+    "path": "internal/app/{{toSnakeCase .ServiceName}}/service",
+    "file_name": "service.go",
+    "interface_name": "{{toUpperFirstCamelCase .ServiceName}}Service",
+    "struct_name": "stub{{toCamelCase .ServiceName}}Service"
+  },
+  "middleware": {
+    "name": "middleware.go"
+  },
+  "endpoints": {
+    "path": "internal/app/{{toSnakeCase .ServiceName}}/endpoints",
+    "file_name": "endpoints.go",
+    "requests_file_name": "requests.go",
+    "responses_file_name": "responses.go"
+  },
+  "transports": {
+    "path": "internal/app/{{toSnakeCase .ServiceName}}/transports",
+    "file_name": "{{.TransportType}}.go"
+  },
+  "pb": {
+    "path": "pb/{{toSnakeCase .ServiceName}}"
+  },
+  "cmd": {
+    "path": "cmd/{{toSnakeCase .ServiceName}}",
+    "file_name": "main.go"
+  },
+  "custom_errors": {
+    "path": "internal/pkg/errors",
+    "file_name": "errors.go"
+  },
+  "custom_responses": {
+    "path": "internal/pkg/responses",
+    "responses_file_name": "responses.go",
+    "errors_file_name": "errors.go",
+    "decode_file_name": "decode.go",
+    "httpstatus_file_name": "httpstatus.go"
+  },
+  "default_transport": "http"
+}

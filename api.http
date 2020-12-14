@@ -1,0 +1,28 @@
+
+
+### list todos
+GET /items
+Host: localhost:8180
+
+
+### get todo
+GET /items/f~aNxtdiiidzTgQYIIhMM
+Host: localhost:8180
+
+
+### post todo
+POST /items
+Host: localhost:8180
+
+{
+    "id": "f~aNxtdiiidzTgQYIIhMM",
+    "text": "dddk"
+}
+### Complete
+PUT /items/f~aNxtdiiidzTgQYIIhMM
+Host: localhost:8180
+
+### clear complete
+
+POST /items/clear
+Host: localhost:8180
