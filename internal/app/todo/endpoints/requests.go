@@ -11,10 +11,14 @@ type Request interface {
 
 // ListRequest collects the request parameters for the List method.
 type ListRequest struct {
+	Filter string `json:"filter"`
 }
 
 func (r ListRequest) validate() error {
-	return nil // TBA
+	if r.Filter != "all" && r.Filter != "active" && r.Filter != "complete" {
+		return service.ErrInvalidQueryParams
+	}
+	return nil
 }
 
 // GetRequest collects the request parameters for the Get method.

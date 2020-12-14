@@ -2,8 +2,10 @@ package service
 
 import (
 	"context"
+	"time"
 
 	"github.com/go-kit/kit/log"
+	gonanoid "github.com/matoous/go-nanoid"
 
 	"github.com/cage1016/todo/internal/app/todo/model"
 	"github.com/cage1016/todo/internal/pkg/errors"
@@ -11,6 +13,10 @@ import (
 
 var (
 	ErrMalformedEntity = errors.New("malformed entity specification")
+
+	ErrNotFound = errors.New("non-existent entity")
+
+	ErrInvalidQueryParams = errors.New("invalid query params")
 )
 
 // Middleware describes a service (as opposed to endpoint) middleware.
@@ -22,7 +28,7 @@ type Middleware func(TodoService) TodoService
 //go:generate mockgen -destination ../../../../internal/mocks/app/todo/service/todoservice.go -package=automocks . TodoService
 type TodoService interface {
 	// [method=get,expose=true,router=items]
-	List(ctx context.Context) (res []model.Todo, err error)
+	List(ctx context.Context, filter string) (res []model.Todo, err error)
 	// [method=get,expose=true,router=items/[a-zA-Z0-9_-~]{21}]
 	Get(ctx context.Context, id string) (res model.Todo, err error)
 	// [method=post,expose=true,router=/items /]
@@ -35,41 +41,51 @@ type TodoService interface {
 
 // the concrete implementation of service interface
 type stubTodoService struct {
-	logger log.Logger `json:"logger"`
+	logger log.Logger
+	repo   model.TodoRepository
 }
 
 // New return a new instance of the service.
 // If you want to add service middleware this is the place to put them.
-func New(logger log.Logger) (s TodoService) {
+func New(repo model.TodoRepository, logger log.Logger) (s TodoService) {
 	var svc TodoService
 	{
-		svc = &stubTodoService{logger: logger}
+		svc = &stubTodoService{repo: repo, logger: logger}
 		svc = LoggingMiddleware(logger)(svc)
 	}
 	return svc
 }
 
 // Implement the business logic of List
-func (to *stubTodoService) List(ctx context.Context) (res []model.Todo, err error) {
-	return res, err
+func (to *stubTodoService) List(ctx context.Context, filter string) (res []model.Todo, err error) {
+	return to.repo.List(ctx, filter)
 }
 
 // Implement the business logic of Get
-func (to *stubTodoService) Get(ctx context.Context, id string) (res model.Todo, err error) {
-	return res, err
+func (to *stubTodoService) Get(ctx context.Context, todoID string) (res model.Todo, err error) {
+	return to.repo.Get(ctx, todoID)
 }
 
 // Implement the business logic of Post
 func (to *stubTodoService) Post(ctx context.Context, todo model.Todo) (res model.Todo, err error) {
-	return res, err
+	id, _ := gonanoid.ID(21)
+
+	todo.ID = id
+	todo.CreatedAt = time.Now()
+	todo.UpdatedAt = time.Now()
+
+	if err := to.repo.Save(ctx, todo); err != nil {
+		return res, err
+	}
+	return todo, nil
 }
 
 // Implement the business logic of Complete
-func (to *stubTodoService) Complete(ctx context.Context, id string) (err error) {
-	return err
+func (to *stubTodoService) Complete(ctx context.Context, todoID string) (err error) {
+	return to.repo.Complete(ctx, todoID)
 }
 
 // Implement the business logic of ClearComplete
 func (to *stubTodoService) ClearComplete(ctx context.Context) (err error) {
-	return err
+	return to.repo.Clear(ctx)
 }

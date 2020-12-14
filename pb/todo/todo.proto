@@ -20,7 +20,7 @@ message ModelTodo {
 }
 
 message ListRequest {
-
+  string filter = 1;
 }
 
 message ListResponse {

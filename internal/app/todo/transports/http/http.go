@@ -138,6 +138,17 @@ func NewHTTPHandler(endpoints endpoints.Endpoints, otTracer stdopentracing.Trace
 // JSON-encoded request from the HTTP request body. Primarily useful in a server.
 func decodeHTTPListRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var req endpoints.ListRequest
+	s := bone.GetQuery(r, "q")
+	if len(s) > 1 {
+		return nil, service.ErrInvalidQueryParams
+	}
+
+	if len(s) == 0 {
+		return nil, service.ErrInvalidQueryParams
+	}
+
+	q := s[0]
+	req.Filter = q
 	return req, nil
 }
 
@@ -417,7 +428,11 @@ func decodeHTTPClearCompleteResponse(_ context.Context, r *http.Response) (inter
 
 func CustomErrorEncoder(errorVal errors.Error) (code int) {
 	switch {
-	// TODO write your own custom error check here
+	case errors.Contains(errorVal, service.ErrInvalidQueryParams),
+		errors.Contains(errorVal, service.ErrMalformedEntity):
+		code = http.StatusBadRequest
+	case errors.Contains(errorVal, service.ErrNotFound):
+		code = http.StatusNotFound
 	}
 	return
 }

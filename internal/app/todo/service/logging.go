@@ -21,12 +21,12 @@ func LoggingMiddleware(logger log.Logger) Middleware {
 	}
 }
 
-func (lm loggingMiddleware) List(ctx context.Context) (res []model.Todo, err error) {
+func (lm loggingMiddleware) List(ctx context.Context, filter string) (res []model.Todo, err error) {
 	defer func() {
-		lm.logger.Log("method", "List", "err", err)
+		lm.logger.Log("method", "List", "filter", filter, "err", err)
 	}()
 
-	return lm.next.List(ctx)
+	return lm.next.List(ctx, filter)
 }
 
 func (lm loggingMiddleware) Get(ctx context.Context, id string) (res model.Todo, err error) {

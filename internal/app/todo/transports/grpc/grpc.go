@@ -134,8 +134,8 @@ func MakeGRPCServer(endpoints endpoints.Endpoints, otTracer stdopentracing.Trace
 // decodeGRPCListRequest is a transport/grpc.DecodeRequestFunc that converts a
 // gRPC request to a user-domain request. Primarily useful in a server.
 func decodeGRPCListRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
-	_ = grpcReq.(*pb.ListRequest)
-	return endpoints.ListRequest{}, nil
+	req := grpcReq.(*pb.ListRequest)
+	return endpoints.ListRequest{Filter: req.Filter}, nil
 }
 
 // encodeGRPCListResponse is a transport/grpc.EncodeResponseFunc that converts a
@@ -404,7 +404,11 @@ func grpcEncodeError(err errors.Error) error {
 	}
 
 	switch {
-	// TODO write your own custom error check here
+	case errors.Contains(err, service.ErrInvalidQueryParams),
+		errors.Contains(err, service.ErrMalformedEntity):
+		return status.Error(codes.InvalidArgument, err.Error())
+	case errors.Contains(err, service.ErrNotFound):
+		return status.Error(codes.NotFound, err.Error())
 	case errors.Contains(err, kitjwt.ErrTokenContextMissing):
 		return status.Error(codes.Unauthenticated, err.Error())
 	default:

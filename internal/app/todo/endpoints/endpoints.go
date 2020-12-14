@@ -82,16 +82,20 @@ func New(svc service.TodoService, logger log.Logger, otTracer stdopentracing.Tra
 // MakeListEndpoint returns an endpoint that invokes List on the service.
 // Primarily useful in a server.
 func MakeListEndpoint(svc service.TodoService) (ep endpoint.Endpoint) {
-	return func(ctx context.Context, _ interface{}) (interface{}, error) {
-		res, err := svc.List(ctx)
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(ListRequest)
+		if err := req.validate(); err != nil {
+			return GetResponse{}, err
+		}
+		res, err := svc.List(ctx, req.Filter)
 		return ListResponse{Res: res}, err
 	}
 }
 
 // List implements the service interface, so Endpoints may be used as a service.
 // This is primarily useful in the context of a client library.
-func (e Endpoints) List(ctx context.Context) (res []model.Todo, err error) {
-	resp, err := e.ListEndpoint(ctx, ListRequest{})
+func (e Endpoints) List(ctx context.Context, filter string) (res []model.Todo, err error) {
+	resp, err := e.ListEndpoint(ctx, ListRequest{Filter: filter})
 	if err != nil {
 		return
 	}

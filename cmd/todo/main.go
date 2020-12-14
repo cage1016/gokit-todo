@@ -13,6 +13,7 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	kitgrpc "github.com/go-kit/kit/transport/grpc"
+	"gorm.io/gorm"
 	stdopentracing "github.com/opentracing/opentracing-go"
 	"github.com/openzipkin/zipkin-go"
 	zipkinhttp "github.com/openzipkin/zipkin-go/reporter/http"
@@ -22,6 +23,7 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/cage1016/todo/internal/app/todo/endpoints"
+	"github.com/cage1016/todo/internal/app/todo/postgres"
 	"github.com/cage1016/todo/internal/app/todo/service"
 	transportsgrpc "github.com/cage1016/todo/internal/app/todo/transports/grpc"
 	transportshttp "github.com/cage1016/todo/internal/app/todo/transports/http"
@@ -29,27 +31,47 @@ import (
 )
 
 const (
-	defZipkinV2URL string = ""
-	defServiceName string = "todo"
-	defLogLevel    string = "error"
-	defServiceHost string = "localhost"
-	defHTTPPort    string = "8180"
-	defGRPCPort    string = "8181"
-	envZipkinV2URL string = "QS_ZIPKIN_V2_URL"
-	envServiceName string = "QS_SERVICE_NAME"
-	envLogLevel    string = "QS_LOG_LEVEL"
-	envServiceHost string = "QS_SERVICE_HOST"
-	envHTTPPort    string = "QS_HTTP_PORT"
-	envGRPCPort    string = "QS_GRPC_PORT"
+	defZipkinV2URL   = ""
+	defServiceName   = "todo"
+	defLogLevel      = "error"
+	defServiceHost   = "localhost"
+	defHTTPPort      = "8180"
+	defGRPCPort      = "8181"
+	defDBHost        = "localhost"
+	defDBPort        = "5432"
+	defDBUser        = "postgres"
+	defDBPass        = "password"
+	defDBName        = "todo"
+	defDBSSLMode     = "disable"
+	defDBSSLCert     = ""
+	defDBSSLKey      = ""
+	defDBSSLRootCert = ""
+
+	envZipkinV2URL   = "QS_ZIPKIN_V2_URL"
+	envServiceName   = "QS_SERVICE_NAME"
+	envLogLevel      = "QS_LOG_LEVEL"
+	envServiceHost   = "QS_SERVICE_HOST"
+	envHTTPPort      = "QS_HTTP_PORT"
+	envGRPCPort      = "QS_GRPC_PORT"
+	envDBHost        = "QS_DB_HOST"
+	envDBPort        = "QS_DB_PORT"
+	envDBUser        = "QS_DB_USER"
+	envDBPass        = "QS_DB_PASS"
+	envDBName        = "QS_DB"
+	envDBSSLMode     = "QS_DB_SSL_MODE"
+	envDBSSLCert     = "QS_DB_SSL_CERT"
+	envDBSSLKey      = "QS_DB_SSL_KEY"
+	envDBSSLRootCert = "QS_DB_SSL_ROOT_CERT"
 )
 
 type config struct {
-	serviceName string `json:""`
-	logLevel    string `json:""`
-	serviceHost string `json:""`
-	httpPort    string `json:""`
-	grpcPort    string `json:""`
-	zipkinV2URL string `json:""`
+	dbConfig    postgres.Config
+	serviceName string
+	logLevel    string
+	serviceHost string
+	httpPort    string
+	grpcPort    string
+	zipkinV2URL string
 }
 
 // Env reads specified environment variable. If no value has been found,
@@ -76,9 +98,12 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	db := connectToDB(cfg.dbConfig, logger)
+	//defer db.Close()
+
 	tracer := initOpentracing()
 	zipkinTracer := initZipkin(cfg.serviceName, cfg.httpPort, cfg.zipkinV2URL, logger)
-	service := NewServer(logger)
+	service := NewServer(db, logger)
 	endpoints := endpoints.New(service, logger, tracer, zipkinTracer)
 
 	hs := health.NewServer()
@@ -106,11 +131,32 @@ func loadConfig(logger log.Logger) (cfg config) {
 	cfg.httpPort = env(envHTTPPort, defHTTPPort)
 	cfg.grpcPort = env(envGRPCPort, defGRPCPort)
 	cfg.zipkinV2URL = env(envZipkinV2URL, defZipkinV2URL)
+	cfg.dbConfig = postgres.Config{
+		Host:        env(envDBHost, defDBHost),
+		Port:        env(envDBPort, defDBPort),
+		User:        env(envDBUser, defDBUser),
+		Pass:        env(envDBPass, defDBPass),
+		Name:        env(envDBName, defDBName),
+		SSLMode:     env(envDBSSLMode, defDBSSLMode),
+		SSLCert:     env(envDBSSLCert, defDBSSLCert),
+		SSLKey:      env(envDBSSLKey, defDBSSLKey),
+		SSLRootCert: env(envDBSSLRootCert, defDBSSLRootCert),
+	}
 	return cfg
 }
 
-func NewServer(logger log.Logger) service.TodoService {
-	service := service.New(logger)
+func connectToDB(dbConfig postgres.Config, logger log.Logger) *gorm.DB {
+	db, err := postgres.Connect(dbConfig)
+	if err != nil {
+		logger.Log("err", err)
+		os.Exit(1)
+	}
+	return db
+}
+
+func NewServer(db *gorm.DB, logger log.Logger) service.TodoService {
+	repo := postgres.New(db, logger)
+	service := service.New(repo, logger)
 	return service
 }
 

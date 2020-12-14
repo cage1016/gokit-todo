@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"encoding/json"
 	"time"
 )
@@ -11,6 +12,19 @@ type Todo struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 	Text      string    `json:"text"`
 	Complete  bool      `json:"complete"`
+}
+
+func (p Todo) MarshalJSON() ([]byte, error) {
+	type Alias Todo
+	return json.Marshal(&struct {
+		Alias
+		UpdatedAt string `json:"updatedAt"`
+		CreatedAt string `json:"createdAt"`
+	}{
+		Alias:     (Alias)(p),
+		UpdatedAt: p.UpdatedAt.Format(time.RFC3339),
+		CreatedAt: p.CreatedAt.Format(time.RFC3339),
+	})
 }
 
 func (t *Todo) UnmarshalJSON(data []byte) error {
@@ -32,4 +46,13 @@ func (t *Todo) UnmarshalJSON(data []byte) error {
 	t.CreatedAt = time.Time{}
 
 	return nil
+}
+
+//go:generate mockgen -destination ../../../../internal/mocks/app/todo/model/todo.go -package=automocks . TodoRepository
+type TodoRepository interface {
+	Save(context.Context, Todo) error
+	Complete(context.Context, string) error
+	Get(context.Context, string) (Todo, error)
+	List(context.Context, string) ([]Todo, error)
+	Clear(context.Context) error
 }

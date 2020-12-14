@@ -1,25 +1,20 @@
-
-
 ### list todos
-GET /items
+GET /items?q=all
 Host: localhost:8180
-
 
 ### get todo
-GET /items/f~aNxtdiiidzTgQYIIhMM
+GET /items/0EO5SViJKeCO8RvsBeZE2
 Host: localhost:8180
-
 
 ### post todo
 POST /items
 Host: localhost:8180
 
 {
-    "id": "f~aNxtdiiidzTgQYIIhMM",
-    "text": "dddk"
+    "text": "gddg"
 }
 ### Complete
-PUT /items/f~aNxtdiiidzTgQYIIhMM
+PUT /items/xW2_5rUi5uvWLu45AFnmq
 Host: localhost:8180
 
 ### clear complete

@@ -92,7 +92,7 @@ type CompleteResponse struct {
 }
 
 func (r CompleteResponse) StatusCode() int {
-	return http.StatusOK // TBA
+	return http.StatusNoContent // TBA
 }
 
 func (r CompleteResponse) Headers() http.Header {
