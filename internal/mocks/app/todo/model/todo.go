@@ -34,6 +34,20 @@ func (m *MockTodoRepository) EXPECT() *MockTodoRepositoryMockRecorder {
 	return m.recorder
 }
 
+// Add mocks base method
+func (m *MockTodoRepository) Add(arg0 context.Context, arg1 model.Todo) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Add", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Add indicates an expected call of Add
+func (mr *MockTodoRepositoryMockRecorder) Add(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockTodoRepository)(nil).Add), arg0, arg1)
+}
+
 // Clear mocks base method
 func (m *MockTodoRepository) Clear(arg0 context.Context) error {
 	m.ctrl.T.Helper()
@@ -62,33 +76,32 @@ func (mr *MockTodoRepositoryMockRecorder) Complete(arg0, arg1 interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Complete", reflect.TypeOf((*MockTodoRepository)(nil).Complete), arg0, arg1)
 }
 
-// Create mocks base method
-func (m *MockTodoRepository) Create(arg0 context.Context, arg1 model.Todo) error {
+// CompleteAll mocks base method
+func (m *MockTodoRepository) CompleteAll(arg0 context.Context) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", arg0, arg1)
+	ret := m.ctrl.Call(m, "CompleteAll", arg0)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// Create indicates an expected call of Create
-func (mr *MockTodoRepositoryMockRecorder) Create(arg0, arg1 interface{}) *gomock.Call {
+// CompleteAll indicates an expected call of CompleteAll
+func (mr *MockTodoRepositoryMockRecorder) CompleteAll(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockTodoRepository)(nil).Create), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CompleteAll", reflect.TypeOf((*MockTodoRepository)(nil).CompleteAll), arg0)
 }
 
-// Get mocks base method
-func (m *MockTodoRepository) Get(arg0 context.Context, arg1 string) (model.Todo, error) {
+// Delete mocks base method
+func (m *MockTodoRepository) Delete(arg0 context.Context, arg1 string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Get", arg0, arg1)
-	ret0, _ := ret[0].(model.Todo)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
-// Get indicates an expected call of Get
-func (mr *MockTodoRepositoryMockRecorder) Get(arg0, arg1 interface{}) *gomock.Call {
+// Delete indicates an expected call of Delete
+func (mr *MockTodoRepositoryMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockTodoRepository)(nil).Get), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockTodoRepository)(nil).Delete), arg0, arg1)
 }
 
 // List mocks base method
@@ -104,4 +117,18 @@ func (m *MockTodoRepository) List(arg0 context.Context, arg1 string) ([]model.To
 func (mr *MockTodoRepositoryMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockTodoRepository)(nil).List), arg0, arg1)
+}
+
+// Update mocks base method
+func (m *MockTodoRepository) Update(arg0 context.Context, arg1 model.Todo) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Update indicates an expected call of Update
+func (mr *MockTodoRepositoryMockRecorder) Update(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockTodoRepository)(nil).Update), arg0, arg1)
 }

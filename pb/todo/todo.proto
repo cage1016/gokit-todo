@@ -4,11 +4,13 @@ package pb;
 
 // The Todo service definition.
 service Todo {
+  rpc Add(AddRequest) returns (AddResponse);
+  rpc Delete(DeleteRequest) returns (DeleteResponse);
+  rpc Update(UpdateRequest) returns (UpdateResponse);
   rpc List(ListRequest) returns (ListResponse);
-  rpc Get(GetRequest) returns (GetResponse);
-  rpc Post(PostRequest) returns (PostResponse);
   rpc Complete(CompleteRequest) returns (CompleteResponse);
-  rpc ClearComplete(ClearCompleteRequest) returns (ClearCompleteResponse);
+  rpc CompleteAll(CompleteAllRequest) returns (CompleteAllResponse);
+  rpc Clear(ClearRequest) returns (ClearResponse);
 }
 
 message ModelTodo {
@@ -17,6 +19,33 @@ message ModelTodo {
   string updated_at = 3;
   string text = 4;
   bool complete = 5 ;
+}
+
+message AddRequest {
+  ModelTodo todo = 1;
+}
+
+message AddResponse {
+  ModelTodo res = 1;
+  string err = 2;
+}
+
+message DeleteRequest {
+  string id = 1;
+}
+
+message DeleteResponse {
+  string err = 1;
+}
+
+message UpdateRequest {
+  string id = 1;
+  ModelTodo todo = 2;
+}
+
+message UpdateResponse {
+  ModelTodo res = 1;
+  string err = 2;
 }
 
 message ListRequest {
@@ -28,24 +57,6 @@ message ListResponse {
   string err = 2;
 }
 
-message GetRequest {
-  string id = 1;
-}
-
-message GetResponse {
-  ModelTodo res = 1;
-  string err = 2;
-}
-
-message PostRequest {
-  ModelTodo todo = 1;
-}
-
-message PostResponse {
-  ModelTodo res = 1;
-  string err = 2;
-}
-
 message CompleteRequest {
   string id = 1;
 }
@@ -54,10 +65,18 @@ message CompleteResponse {
   string err = 1;
 }
 
-message ClearCompleteRequest {
+message CompleteAllRequest {
 
 }
 
-message ClearCompleteResponse {
+message CompleteAllResponse {
+  string err = 1;
+}
+
+message ClearRequest {
+
+}
+
+message ClearResponse {
   string err = 1;
 }

@@ -18,7 +18,7 @@ import (
 	psql "github.com/cage1016/todo/internal/app/todo/postgres"
 )
 
-func TestTodoRepository_Create(t *testing.T) {
+func TestTodoRepository_Add(t *testing.T) {
 	var (
 		mTodo = model.Todo{
 			ID:        "iKe0KxpurIn0E_6vzUDAr",
@@ -73,25 +73,9 @@ func TestTodoRepository_Create(t *testing.T) {
 			gdb, err := gorm.Open(postgres.New(postgres.Config{Conn: db}), &gorm.Config{})
 			repo := psql.New(gdb, log.NewLogfmtLogger(os.Stderr))
 
-			if err := repo.Create(context.Background(), tt.args.todo); (err != nil) != tt.wantErr {
+			if err := repo.Add(context.Background(), tt.args.todo); (err != nil) != tt.wantErr {
 				t.Errorf("Add(ctx context.Context) error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
-}
-
-func TestTodoRepository_Get(t *testing.T) {
-
-}
-
-func TestTodoRepository_List(t *testing.T) {
-
-}
-
-func TestTodoRepository_Complete(t *testing.T) {
-
-}
-
-func TestTodoRepository_Clear(t *testing.T) {
-
 }

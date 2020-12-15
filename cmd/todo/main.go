@@ -13,7 +13,6 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	kitgrpc "github.com/go-kit/kit/transport/grpc"
-	"gorm.io/gorm"
 	stdopentracing "github.com/opentracing/opentracing-go"
 	"github.com/openzipkin/zipkin-go"
 	zipkinhttp "github.com/openzipkin/zipkin-go/reporter/http"
@@ -21,6 +20,7 @@ import (
 	"google.golang.org/grpc/health"
 	healthgrpc "google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
+	"gorm.io/gorm"
 
 	"github.com/cage1016/todo/internal/app/todo/endpoints"
 	"github.com/cage1016/todo/internal/app/todo/postgres"
@@ -88,10 +88,10 @@ func main() {
 	{
 		logger = log.NewLogfmtLogger(os.Stderr)
 		logger = log.With(logger, "ts", log.DefaultTimestampUTC)
-		logger = log.With(logger, "caller", log.DefaultCaller)
 	}
 	cfg := loadConfig(logger)
 	logger = level.NewFilter(logger, level.AllowInfo())
+	logger = log.With(logger, "caller", log.DefaultCaller)
 	logger = log.With(logger, "service", cfg.serviceName)
 	level.Info(logger).Log("version", service.Version, "commitHash", service.CommitHash, "buildTimeStamp", service.BuildTimeStamp)
 

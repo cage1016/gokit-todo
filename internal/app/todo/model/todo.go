@@ -7,7 +7,7 @@ import (
 )
 
 type Todo struct {
-	ID        string    `json:"id"`
+	ID        string    `gorm:"primaryKey" json:"id" `
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 	Text      string    `json:"text"`
@@ -50,9 +50,11 @@ func (t *Todo) UnmarshalJSON(data []byte) error {
 
 //go:generate mockgen -destination ../../../../internal/mocks/app/todo/model/todo.go -package=automocks . TodoRepository
 type TodoRepository interface {
-	Create(context.Context, Todo) error
-	Complete(context.Context, string) error
-	Get(context.Context, string) (Todo, error)
+	Add(context.Context, Todo) error
+	Delete(context.Context, string) error
+	Update(context.Context, Todo) error
 	List(context.Context, string) ([]Todo, error)
+	Complete(context.Context, string) error
+	CompleteAll(context.Context) error
 	Clear(context.Context) error
 }

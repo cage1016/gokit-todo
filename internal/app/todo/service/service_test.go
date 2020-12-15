@@ -17,7 +17,7 @@ import (
 	automocks "github.com/cage1016/todo/internal/mocks/app/todo/model"
 )
 
-func TestStubTodoService_Post(t *testing.T) {
+func TestStubTodoService_Add(t *testing.T) {
 	type fields struct {
 		repo *automocks.MockTodoRepository
 	}
@@ -37,7 +37,7 @@ func TestStubTodoService_Post(t *testing.T) {
 			name: "Add todo",
 			prepare: func(f *fields) {
 				gomock.InOrder(
-					f.repo.EXPECT().Create(context.Background(), gomock.Any()).Return(nil),
+					f.repo.EXPECT().Add(context.Background(), gomock.Any()).Return(nil),
 				)
 			},
 			args: args{todo: model.Todo{
@@ -64,7 +64,7 @@ func TestStubTodoService_Post(t *testing.T) {
 			}
 
 			svc := service.New(f.repo, log.NewLogfmtLogger(os.Stderr))
-			if res, err := svc.Post(context.Background(), tt.args.todo); (err != nil) != tt.wantErr {
+			if res, err := svc.Add(context.Background(), tt.args.todo); (err != nil) != tt.wantErr {
 				t.Errorf("svc.Post error = %v, wantErr %v", err, tt.wantErr)
 			} else {
 				if tt.checkFunc != nil {

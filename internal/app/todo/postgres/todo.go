@@ -9,14 +9,9 @@ import (
 
 	"github.com/cage1016/todo/internal/app/todo/model"
 	"github.com/cage1016/todo/internal/app/todo/service"
-	"github.com/cage1016/todo/internal/pkg/errors"
 )
 
 var _ model.TodoRepository = (*todoRepository)(nil)
-
-var (
-	ErrDatabase = errors.New("database internal")
-)
 
 type todoRepository struct {
 	mu  sync.RWMutex
@@ -24,20 +19,57 @@ type todoRepository struct {
 	db  *gorm.DB
 }
 
-func New(db *gorm.DB, logger log.Logger) model.TodoRepository {
-	return &todoRepository{
-		mu:  sync.RWMutex{},
-		log: logger,
-		db:  db,
-	}
-}
-
-func (repo *todoRepository) Create(ctx context.Context, todo model.Todo) error {
+func (repo *todoRepository) Add(ctx context.Context, todo model.Todo) error {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 
 	if err := repo.db.WithContext(ctx).Create(ModelToDB(todo)).Error; err != nil {
 		return err
+	}
+	return nil
+}
+
+func (repo *todoRepository) Delete(ctx context.Context, todoID string) error {
+	repo.mu.Lock()
+	defer repo.mu.Unlock()
+
+	if err := repo.db.WithContext(ctx).Delete(&Todo{ID: todoID}).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (repo *todoRepository) Update(ctx context.Context, todo model.Todo) error {
+	repo.mu.Lock()
+	defer repo.mu.Unlock()
+
+	result := repo.db.WithContext(ctx).Model(&Todo{ID: todo.ID}).UpdateColumn("text", todo.Text)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return service.ErrNotFound
+	}
+	return nil
+}
+
+func (repo *todoRepository) CompleteAll(ctx context.Context) error {
+	repo.mu.Lock()
+	defer repo.mu.Unlock()
+
+	var nonCompleteCount int64
+	if err := repo.db.WithContext(ctx).Model(&Todo{}).Where("complete = ?", false).Count(&nonCompleteCount).Error; err != nil {
+		return err
+	}
+
+	if nonCompleteCount > 0 {
+		if err := repo.db.WithContext(ctx).Exec("UPDATE todos SET complete = true").Error; err != nil {
+			return err
+		}
+	}else{
+		if err := repo.db.WithContext(ctx).Exec("UPDATE todos SET complete = false").Error; err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -62,20 +94,20 @@ func (repo *todoRepository) List(ctx context.Context, filter string) ([]model.To
 
 	db := repo.db.WithContext(ctx)
 	switch filter {
-	case "active":
+	case service.ACTIVE:
 		db = db.Where("complete", false)
 		break
-	case "complete":
+	case service.COMPLETE:
 		db = db.Where("complete", true)
 		break
-	case "all":
+	case service.ALL:
 		break
 	default:
 
 	}
 
 	dTodos := []Todo{}
-	if err := db.Find(&dTodos).Order("createdAt").Error; err != nil {
+	if err := db.Order("created_at").Find(&dTodos).Error; err != nil {
 		return []model.Todo{}, nil
 	}
 
@@ -86,24 +118,17 @@ func (repo *todoRepository) List(ctx context.Context, filter string) ([]model.To
 	return todos, nil
 }
 
-func (repo *todoRepository) Get(ctx context.Context, todoID string) (model.Todo, error) {
-	repo.mu.RLock()
-	defer repo.mu.RUnlock()
-
-	todo := Todo{ID: todoID}
-	if err := repo.db.First(&todo).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return model.Todo{}, errors.Wrap(service.ErrNotFound, err)
-		}
-		return model.Todo{}, err
-	}
-
-	return DBtoModel(todo), nil
-}
-
 func (repo *todoRepository) Clear(ctx context.Context) error {
 	if err := repo.db.WithContext(ctx).Where("complete", true).Delete(&Todo{}).Error; err != nil {
 		return err
 	}
 	return nil
+}
+
+func New(db *gorm.DB, logger log.Logger) model.TodoRepository {
+	return &todoRepository{
+		mu:  sync.RWMutex{},
+		log: logger,
+		db:  db,
+	}
 }

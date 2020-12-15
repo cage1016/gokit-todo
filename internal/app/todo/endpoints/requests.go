@@ -9,37 +9,50 @@ type Request interface {
 	validate() error
 }
 
-// ListRequest collects the request parameters for the List method.
-type ListRequest struct {
-	Filter string `json:"filter"`
+// AddRequest collects the request parameters for the Add method.
+type AddRequest struct {
+	Todo model.Todo `json:"todo"`
 }
 
-func (r ListRequest) validate() error {
-	if r.Filter != "all" && r.Filter != "active" && r.Filter != "complete" {
-		return service.ErrInvalidQueryParams
-	}
-	return nil
+func (r AddRequest) validate() error {
+	return nil // TBA
 }
 
-// GetRequest collects the request parameters for the Get method.
-type GetRequest struct {
+// DeleteRequest collects the request parameters for the Delete method.
+type DeleteRequest struct {
 	Id string `json:"id"`
 }
 
-func (r GetRequest) validate() error {
+func (r DeleteRequest) validate() error {
 	if r.Id == "" {
 		return service.ErrMalformedEntity
 	}
 	return nil
 }
 
-// PostRequest collects the request parameters for the Post method.
-type PostRequest struct {
+// UpdateRequest collects the request parameters for the Update method.
+type UpdateRequest struct {
+	Id   string     `json:"id"`
 	Todo model.Todo `json:"todo"`
 }
 
-func (r PostRequest) validate() error {
-	return nil // TBA
+func (r UpdateRequest) validate() error {
+	if r.Id != r.Todo.ID {
+		return service.ErrMalformedEntity
+	}
+	return nil
+}
+
+// ListRequest collects the request parameters for the List method.
+type ListRequest struct {
+	Filter string `json:"filter"`
+}
+
+func (r ListRequest) validate() error {
+	if r.Filter != service.ALL && r.Filter != service.ACTIVE && r.Filter != service.COMPLETE {
+		return service.ErrInvalidQueryParams
+	}
+	return nil
 }
 
 // CompleteRequest collects the request parameters for the Complete method.
@@ -54,10 +67,18 @@ func (r CompleteRequest) validate() error {
 	return nil
 }
 
-// ClearCompleteRequest collects the request parameters for the ClearComplete method.
-type ClearCompleteRequest struct {
+// CompleteAllRequest collects the request parameters for the CompleteAll method.
+type CompleteAllRequest struct {
 }
 
-func (r ClearCompleteRequest) validate() error {
+func (r CompleteAllRequest) validate() error {
+	return nil // TBA
+}
+
+// ClearRequest collects the request parameters for the Clear method.
+type ClearRequest struct {
+}
+
+func (r ClearRequest) validate() error {
 	return nil // TBA
 }

@@ -21,28 +21,36 @@ func LoggingMiddleware(logger log.Logger) Middleware {
 	}
 }
 
+func (lm loggingMiddleware) Add(ctx context.Context, todo model.Todo) (res model.Todo, err error) {
+	defer func() {
+		lm.logger.Log("method", "Add", "todo", todo, "err", err)
+	}()
+
+	return lm.next.Add(ctx, todo)
+}
+
+func (lm loggingMiddleware) Delete(ctx context.Context, id string) (err error) {
+	defer func() {
+		lm.logger.Log("method", "Delete", "id", id, "err", err)
+	}()
+
+	return lm.next.Delete(ctx, id)
+}
+
+func (lm loggingMiddleware) Update(ctx context.Context, id string, todo model.Todo) (res model.Todo, err error) {
+	defer func() {
+		lm.logger.Log("method", "Update", "id", id, "todo", todo, "err", err)
+	}()
+
+	return lm.next.Update(ctx, id, todo)
+}
+
 func (lm loggingMiddleware) List(ctx context.Context, filter string) (res []model.Todo, err error) {
 	defer func() {
 		lm.logger.Log("method", "List", "filter", filter, "err", err)
 	}()
 
 	return lm.next.List(ctx, filter)
-}
-
-func (lm loggingMiddleware) Get(ctx context.Context, id string) (res model.Todo, err error) {
-	defer func() {
-		lm.logger.Log("method", "Get", "id", id, "err", err)
-	}()
-
-	return lm.next.Get(ctx, id)
-}
-
-func (lm loggingMiddleware) Post(ctx context.Context, todo model.Todo) (res model.Todo, err error) {
-	defer func() {
-		lm.logger.Log("method", "Post", "todo", todo, "err", err)
-	}()
-
-	return lm.next.Post(ctx, todo)
 }
 
 func (lm loggingMiddleware) Complete(ctx context.Context, id string) (err error) {
@@ -53,10 +61,18 @@ func (lm loggingMiddleware) Complete(ctx context.Context, id string) (err error)
 	return lm.next.Complete(ctx, id)
 }
 
-func (lm loggingMiddleware) ClearComplete(ctx context.Context) (err error) {
+func (lm loggingMiddleware) CompleteAll(ctx context.Context) (err error) {
 	defer func() {
-		lm.logger.Log("method", "ClearComplete", "err", err)
+		lm.logger.Log("method", "CompleteAll", "err", err)
 	}()
 
-	return lm.next.ClearComplete(ctx)
+	return lm.next.CompleteAll(ctx)
+}
+
+func (lm loggingMiddleware) Clear(ctx context.Context) (err error) {
+	defer func() {
+		lm.logger.Log("method", "Clear", "err", err)
+	}()
+
+	return lm.next.Clear(ctx)
 }

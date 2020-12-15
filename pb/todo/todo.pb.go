@@ -95,6 +95,264 @@ func (m *ModelTodo) GetComplete() bool {
 	return false
 }
 
+type AddRequest struct {
+	Todo                 *ModelTodo `protobuf:"bytes,1,opt,name=todo,proto3" json:"todo,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *AddRequest) Reset()         { *m = AddRequest{} }
+func (m *AddRequest) String() string { return proto.CompactTextString(m) }
+func (*AddRequest) ProtoMessage()    {}
+func (*AddRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0e4b95d0c4e09639, []int{1}
+}
+
+func (m *AddRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AddRequest.Unmarshal(m, b)
+}
+func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AddRequest.Marshal(b, m, deterministic)
+}
+func (m *AddRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddRequest.Merge(m, src)
+}
+func (m *AddRequest) XXX_Size() int {
+	return xxx_messageInfo_AddRequest.Size(m)
+}
+func (m *AddRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AddRequest proto.InternalMessageInfo
+
+func (m *AddRequest) GetTodo() *ModelTodo {
+	if m != nil {
+		return m.Todo
+	}
+	return nil
+}
+
+type AddResponse struct {
+	Res                  *ModelTodo `protobuf:"bytes,1,opt,name=res,proto3" json:"res,omitempty"`
+	Err                  string     `protobuf:"bytes,2,opt,name=err,proto3" json:"err,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *AddResponse) Reset()         { *m = AddResponse{} }
+func (m *AddResponse) String() string { return proto.CompactTextString(m) }
+func (*AddResponse) ProtoMessage()    {}
+func (*AddResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0e4b95d0c4e09639, []int{2}
+}
+
+func (m *AddResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AddResponse.Unmarshal(m, b)
+}
+func (m *AddResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AddResponse.Marshal(b, m, deterministic)
+}
+func (m *AddResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddResponse.Merge(m, src)
+}
+func (m *AddResponse) XXX_Size() int {
+	return xxx_messageInfo_AddResponse.Size(m)
+}
+func (m *AddResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AddResponse proto.InternalMessageInfo
+
+func (m *AddResponse) GetRes() *ModelTodo {
+	if m != nil {
+		return m.Res
+	}
+	return nil
+}
+
+func (m *AddResponse) GetErr() string {
+	if m != nil {
+		return m.Err
+	}
+	return ""
+}
+
+type DeleteRequest struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DeleteRequest) Reset()         { *m = DeleteRequest{} }
+func (m *DeleteRequest) String() string { return proto.CompactTextString(m) }
+func (*DeleteRequest) ProtoMessage()    {}
+func (*DeleteRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0e4b95d0c4e09639, []int{3}
+}
+
+func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteRequest.Unmarshal(m, b)
+}
+func (m *DeleteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteRequest.Marshal(b, m, deterministic)
+}
+func (m *DeleteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteRequest.Merge(m, src)
+}
+func (m *DeleteRequest) XXX_Size() int {
+	return xxx_messageInfo_DeleteRequest.Size(m)
+}
+func (m *DeleteRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
+
+func (m *DeleteRequest) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+type DeleteResponse struct {
+	Err                  string   `protobuf:"bytes,1,opt,name=err,proto3" json:"err,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DeleteResponse) Reset()         { *m = DeleteResponse{} }
+func (m *DeleteResponse) String() string { return proto.CompactTextString(m) }
+func (*DeleteResponse) ProtoMessage()    {}
+func (*DeleteResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0e4b95d0c4e09639, []int{4}
+}
+
+func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteResponse.Unmarshal(m, b)
+}
+func (m *DeleteResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteResponse.Marshal(b, m, deterministic)
+}
+func (m *DeleteResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteResponse.Merge(m, src)
+}
+func (m *DeleteResponse) XXX_Size() int {
+	return xxx_messageInfo_DeleteResponse.Size(m)
+}
+func (m *DeleteResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteResponse proto.InternalMessageInfo
+
+func (m *DeleteResponse) GetErr() string {
+	if m != nil {
+		return m.Err
+	}
+	return ""
+}
+
+type UpdateRequest struct {
+	Id                   string     `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Todo                 *ModelTodo `protobuf:"bytes,2,opt,name=todo,proto3" json:"todo,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *UpdateRequest) Reset()         { *m = UpdateRequest{} }
+func (m *UpdateRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateRequest) ProtoMessage()    {}
+func (*UpdateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0e4b95d0c4e09639, []int{5}
+}
+
+func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateRequest.Unmarshal(m, b)
+}
+func (m *UpdateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateRequest.Marshal(b, m, deterministic)
+}
+func (m *UpdateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateRequest.Merge(m, src)
+}
+func (m *UpdateRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateRequest.Size(m)
+}
+func (m *UpdateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateRequest proto.InternalMessageInfo
+
+func (m *UpdateRequest) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+func (m *UpdateRequest) GetTodo() *ModelTodo {
+	if m != nil {
+		return m.Todo
+	}
+	return nil
+}
+
+type UpdateResponse struct {
+	Res                  *ModelTodo `protobuf:"bytes,1,opt,name=res,proto3" json:"res,omitempty"`
+	Err                  string     `protobuf:"bytes,2,opt,name=err,proto3" json:"err,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *UpdateResponse) Reset()         { *m = UpdateResponse{} }
+func (m *UpdateResponse) String() string { return proto.CompactTextString(m) }
+func (*UpdateResponse) ProtoMessage()    {}
+func (*UpdateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0e4b95d0c4e09639, []int{6}
+}
+
+func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateResponse.Unmarshal(m, b)
+}
+func (m *UpdateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateResponse.Marshal(b, m, deterministic)
+}
+func (m *UpdateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateResponse.Merge(m, src)
+}
+func (m *UpdateResponse) XXX_Size() int {
+	return xxx_messageInfo_UpdateResponse.Size(m)
+}
+func (m *UpdateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateResponse proto.InternalMessageInfo
+
+func (m *UpdateResponse) GetRes() *ModelTodo {
+	if m != nil {
+		return m.Res
+	}
+	return nil
+}
+
+func (m *UpdateResponse) GetErr() string {
+	if m != nil {
+		return m.Err
+	}
+	return ""
+}
+
 type ListRequest struct {
 	Filter               string   `protobuf:"bytes,1,opt,name=filter,proto3" json:"filter,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -106,7 +364,7 @@ func (m *ListRequest) Reset()         { *m = ListRequest{} }
 func (m *ListRequest) String() string { return proto.CompactTextString(m) }
 func (*ListRequest) ProtoMessage()    {}
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e4b95d0c4e09639, []int{1}
+	return fileDescriptor_0e4b95d0c4e09639, []int{7}
 }
 
 func (m *ListRequest) XXX_Unmarshal(b []byte) error {
@@ -146,7 +404,7 @@ func (m *ListResponse) Reset()         { *m = ListResponse{} }
 func (m *ListResponse) String() string { return proto.CompactTextString(m) }
 func (*ListResponse) ProtoMessage()    {}
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e4b95d0c4e09639, []int{2}
+	return fileDescriptor_0e4b95d0c4e09639, []int{8}
 }
 
 func (m *ListResponse) XXX_Unmarshal(b []byte) error {
@@ -181,178 +439,6 @@ func (m *ListResponse) GetErr() string {
 	return ""
 }
 
-type GetRequest struct {
-	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *GetRequest) Reset()         { *m = GetRequest{} }
-func (m *GetRequest) String() string { return proto.CompactTextString(m) }
-func (*GetRequest) ProtoMessage()    {}
-func (*GetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e4b95d0c4e09639, []int{3}
-}
-
-func (m *GetRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GetRequest.Unmarshal(m, b)
-}
-func (m *GetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GetRequest.Marshal(b, m, deterministic)
-}
-func (m *GetRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetRequest.Merge(m, src)
-}
-func (m *GetRequest) XXX_Size() int {
-	return xxx_messageInfo_GetRequest.Size(m)
-}
-func (m *GetRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GetRequest proto.InternalMessageInfo
-
-func (m *GetRequest) GetId() string {
-	if m != nil {
-		return m.Id
-	}
-	return ""
-}
-
-type GetResponse struct {
-	Res                  *ModelTodo `protobuf:"bytes,1,opt,name=res,proto3" json:"res,omitempty"`
-	Err                  string     `protobuf:"bytes,2,opt,name=err,proto3" json:"err,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
-	XXX_unrecognized     []byte     `json:"-"`
-	XXX_sizecache        int32      `json:"-"`
-}
-
-func (m *GetResponse) Reset()         { *m = GetResponse{} }
-func (m *GetResponse) String() string { return proto.CompactTextString(m) }
-func (*GetResponse) ProtoMessage()    {}
-func (*GetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e4b95d0c4e09639, []int{4}
-}
-
-func (m *GetResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GetResponse.Unmarshal(m, b)
-}
-func (m *GetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GetResponse.Marshal(b, m, deterministic)
-}
-func (m *GetResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetResponse.Merge(m, src)
-}
-func (m *GetResponse) XXX_Size() int {
-	return xxx_messageInfo_GetResponse.Size(m)
-}
-func (m *GetResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GetResponse proto.InternalMessageInfo
-
-func (m *GetResponse) GetRes() *ModelTodo {
-	if m != nil {
-		return m.Res
-	}
-	return nil
-}
-
-func (m *GetResponse) GetErr() string {
-	if m != nil {
-		return m.Err
-	}
-	return ""
-}
-
-type PostRequest struct {
-	Todo                 *ModelTodo `protobuf:"bytes,1,opt,name=todo,proto3" json:"todo,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
-	XXX_unrecognized     []byte     `json:"-"`
-	XXX_sizecache        int32      `json:"-"`
-}
-
-func (m *PostRequest) Reset()         { *m = PostRequest{} }
-func (m *PostRequest) String() string { return proto.CompactTextString(m) }
-func (*PostRequest) ProtoMessage()    {}
-func (*PostRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e4b95d0c4e09639, []int{5}
-}
-
-func (m *PostRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_PostRequest.Unmarshal(m, b)
-}
-func (m *PostRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_PostRequest.Marshal(b, m, deterministic)
-}
-func (m *PostRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PostRequest.Merge(m, src)
-}
-func (m *PostRequest) XXX_Size() int {
-	return xxx_messageInfo_PostRequest.Size(m)
-}
-func (m *PostRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_PostRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_PostRequest proto.InternalMessageInfo
-
-func (m *PostRequest) GetTodo() *ModelTodo {
-	if m != nil {
-		return m.Todo
-	}
-	return nil
-}
-
-type PostResponse struct {
-	Res                  *ModelTodo `protobuf:"bytes,1,opt,name=res,proto3" json:"res,omitempty"`
-	Err                  string     `protobuf:"bytes,2,opt,name=err,proto3" json:"err,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
-	XXX_unrecognized     []byte     `json:"-"`
-	XXX_sizecache        int32      `json:"-"`
-}
-
-func (m *PostResponse) Reset()         { *m = PostResponse{} }
-func (m *PostResponse) String() string { return proto.CompactTextString(m) }
-func (*PostResponse) ProtoMessage()    {}
-func (*PostResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e4b95d0c4e09639, []int{6}
-}
-
-func (m *PostResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_PostResponse.Unmarshal(m, b)
-}
-func (m *PostResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_PostResponse.Marshal(b, m, deterministic)
-}
-func (m *PostResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PostResponse.Merge(m, src)
-}
-func (m *PostResponse) XXX_Size() int {
-	return xxx_messageInfo_PostResponse.Size(m)
-}
-func (m *PostResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_PostResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_PostResponse proto.InternalMessageInfo
-
-func (m *PostResponse) GetRes() *ModelTodo {
-	if m != nil {
-		return m.Res
-	}
-	return nil
-}
-
-func (m *PostResponse) GetErr() string {
-	if m != nil {
-		return m.Err
-	}
-	return ""
-}
-
 type CompleteRequest struct {
 	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -364,7 +450,7 @@ func (m *CompleteRequest) Reset()         { *m = CompleteRequest{} }
 func (m *CompleteRequest) String() string { return proto.CompactTextString(m) }
 func (*CompleteRequest) ProtoMessage()    {}
 func (*CompleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e4b95d0c4e09639, []int{7}
+	return fileDescriptor_0e4b95d0c4e09639, []int{9}
 }
 
 func (m *CompleteRequest) XXX_Unmarshal(b []byte) error {
@@ -403,7 +489,7 @@ func (m *CompleteResponse) Reset()         { *m = CompleteResponse{} }
 func (m *CompleteResponse) String() string { return proto.CompactTextString(m) }
 func (*CompleteResponse) ProtoMessage()    {}
 func (*CompleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e4b95d0c4e09639, []int{8}
+	return fileDescriptor_0e4b95d0c4e09639, []int{10}
 }
 
 func (m *CompleteResponse) XXX_Unmarshal(b []byte) error {
@@ -431,70 +517,140 @@ func (m *CompleteResponse) GetErr() string {
 	return ""
 }
 
-type ClearCompleteRequest struct {
+type CompleteAllRequest struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ClearCompleteRequest) Reset()         { *m = ClearCompleteRequest{} }
-func (m *ClearCompleteRequest) String() string { return proto.CompactTextString(m) }
-func (*ClearCompleteRequest) ProtoMessage()    {}
-func (*ClearCompleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e4b95d0c4e09639, []int{9}
+func (m *CompleteAllRequest) Reset()         { *m = CompleteAllRequest{} }
+func (m *CompleteAllRequest) String() string { return proto.CompactTextString(m) }
+func (*CompleteAllRequest) ProtoMessage()    {}
+func (*CompleteAllRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0e4b95d0c4e09639, []int{11}
 }
 
-func (m *ClearCompleteRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ClearCompleteRequest.Unmarshal(m, b)
+func (m *CompleteAllRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CompleteAllRequest.Unmarshal(m, b)
 }
-func (m *ClearCompleteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ClearCompleteRequest.Marshal(b, m, deterministic)
+func (m *CompleteAllRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CompleteAllRequest.Marshal(b, m, deterministic)
 }
-func (m *ClearCompleteRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClearCompleteRequest.Merge(m, src)
+func (m *CompleteAllRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CompleteAllRequest.Merge(m, src)
 }
-func (m *ClearCompleteRequest) XXX_Size() int {
-	return xxx_messageInfo_ClearCompleteRequest.Size(m)
+func (m *CompleteAllRequest) XXX_Size() int {
+	return xxx_messageInfo_CompleteAllRequest.Size(m)
 }
-func (m *ClearCompleteRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_ClearCompleteRequest.DiscardUnknown(m)
+func (m *CompleteAllRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CompleteAllRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ClearCompleteRequest proto.InternalMessageInfo
+var xxx_messageInfo_CompleteAllRequest proto.InternalMessageInfo
 
-type ClearCompleteResponse struct {
+type CompleteAllResponse struct {
 	Err                  string   `protobuf:"bytes,1,opt,name=err,proto3" json:"err,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ClearCompleteResponse) Reset()         { *m = ClearCompleteResponse{} }
-func (m *ClearCompleteResponse) String() string { return proto.CompactTextString(m) }
-func (*ClearCompleteResponse) ProtoMessage()    {}
-func (*ClearCompleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e4b95d0c4e09639, []int{10}
+func (m *CompleteAllResponse) Reset()         { *m = CompleteAllResponse{} }
+func (m *CompleteAllResponse) String() string { return proto.CompactTextString(m) }
+func (*CompleteAllResponse) ProtoMessage()    {}
+func (*CompleteAllResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0e4b95d0c4e09639, []int{12}
 }
 
-func (m *ClearCompleteResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ClearCompleteResponse.Unmarshal(m, b)
+func (m *CompleteAllResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CompleteAllResponse.Unmarshal(m, b)
 }
-func (m *ClearCompleteResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ClearCompleteResponse.Marshal(b, m, deterministic)
+func (m *CompleteAllResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CompleteAllResponse.Marshal(b, m, deterministic)
 }
-func (m *ClearCompleteResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClearCompleteResponse.Merge(m, src)
+func (m *CompleteAllResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CompleteAllResponse.Merge(m, src)
 }
-func (m *ClearCompleteResponse) XXX_Size() int {
-	return xxx_messageInfo_ClearCompleteResponse.Size(m)
+func (m *CompleteAllResponse) XXX_Size() int {
+	return xxx_messageInfo_CompleteAllResponse.Size(m)
 }
-func (m *ClearCompleteResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_ClearCompleteResponse.DiscardUnknown(m)
+func (m *CompleteAllResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CompleteAllResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ClearCompleteResponse proto.InternalMessageInfo
+var xxx_messageInfo_CompleteAllResponse proto.InternalMessageInfo
 
-func (m *ClearCompleteResponse) GetErr() string {
+func (m *CompleteAllResponse) GetErr() string {
+	if m != nil {
+		return m.Err
+	}
+	return ""
+}
+
+type ClearRequest struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ClearRequest) Reset()         { *m = ClearRequest{} }
+func (m *ClearRequest) String() string { return proto.CompactTextString(m) }
+func (*ClearRequest) ProtoMessage()    {}
+func (*ClearRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0e4b95d0c4e09639, []int{13}
+}
+
+func (m *ClearRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ClearRequest.Unmarshal(m, b)
+}
+func (m *ClearRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ClearRequest.Marshal(b, m, deterministic)
+}
+func (m *ClearRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClearRequest.Merge(m, src)
+}
+func (m *ClearRequest) XXX_Size() int {
+	return xxx_messageInfo_ClearRequest.Size(m)
+}
+func (m *ClearRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClearRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ClearRequest proto.InternalMessageInfo
+
+type ClearResponse struct {
+	Err                  string   `protobuf:"bytes,1,opt,name=err,proto3" json:"err,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ClearResponse) Reset()         { *m = ClearResponse{} }
+func (m *ClearResponse) String() string { return proto.CompactTextString(m) }
+func (*ClearResponse) ProtoMessage()    {}
+func (*ClearResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0e4b95d0c4e09639, []int{14}
+}
+
+func (m *ClearResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ClearResponse.Unmarshal(m, b)
+}
+func (m *ClearResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ClearResponse.Marshal(b, m, deterministic)
+}
+func (m *ClearResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClearResponse.Merge(m, src)
+}
+func (m *ClearResponse) XXX_Size() int {
+	return xxx_messageInfo_ClearResponse.Size(m)
+}
+func (m *ClearResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClearResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ClearResponse proto.InternalMessageInfo
+
+func (m *ClearResponse) GetErr() string {
 	if m != nil {
 		return m.Err
 	}
@@ -503,46 +659,54 @@ func (m *ClearCompleteResponse) GetErr() string {
 
 func init() {
 	proto.RegisterType((*ModelTodo)(nil), "pb.ModelTodo")
+	proto.RegisterType((*AddRequest)(nil), "pb.AddRequest")
+	proto.RegisterType((*AddResponse)(nil), "pb.AddResponse")
+	proto.RegisterType((*DeleteRequest)(nil), "pb.DeleteRequest")
+	proto.RegisterType((*DeleteResponse)(nil), "pb.DeleteResponse")
+	proto.RegisterType((*UpdateRequest)(nil), "pb.UpdateRequest")
+	proto.RegisterType((*UpdateResponse)(nil), "pb.UpdateResponse")
 	proto.RegisterType((*ListRequest)(nil), "pb.ListRequest")
 	proto.RegisterType((*ListResponse)(nil), "pb.ListResponse")
-	proto.RegisterType((*GetRequest)(nil), "pb.GetRequest")
-	proto.RegisterType((*GetResponse)(nil), "pb.GetResponse")
-	proto.RegisterType((*PostRequest)(nil), "pb.PostRequest")
-	proto.RegisterType((*PostResponse)(nil), "pb.PostResponse")
 	proto.RegisterType((*CompleteRequest)(nil), "pb.CompleteRequest")
 	proto.RegisterType((*CompleteResponse)(nil), "pb.CompleteResponse")
-	proto.RegisterType((*ClearCompleteRequest)(nil), "pb.ClearCompleteRequest")
-	proto.RegisterType((*ClearCompleteResponse)(nil), "pb.ClearCompleteResponse")
+	proto.RegisterType((*CompleteAllRequest)(nil), "pb.CompleteAllRequest")
+	proto.RegisterType((*CompleteAllResponse)(nil), "pb.CompleteAllResponse")
+	proto.RegisterType((*ClearRequest)(nil), "pb.ClearRequest")
+	proto.RegisterType((*ClearResponse)(nil), "pb.ClearResponse")
 }
 
 func init() { proto.RegisterFile("todo.proto", fileDescriptor_0e4b95d0c4e09639) }
 
 var fileDescriptor_0e4b95d0c4e09639 = []byte{
-	// 375 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x53, 0xcd, 0x4b, 0xfb, 0x40,
-	0x14, 0x24, 0x1f, 0xbf, 0xd2, 0x4e, 0x7e, 0xfd, 0x60, 0xad, 0x25, 0x06, 0xc5, 0x36, 0xa8, 0xb4,
-	0x97, 0x22, 0x15, 0xef, 0x96, 0x0a, 0xbd, 0x28, 0x48, 0xf0, 0x2e, 0x6d, 0xf3, 0x84, 0x40, 0x74,
-	0x63, 0xb2, 0x05, 0xaf, 0x1e, 0xfd, 0xaf, 0x65, 0x37, 0xdb, 0xa4, 0x0d, 0x2d, 0x88, 0xb7, 0xdd,
-	0x99, 0xb7, 0xf3, 0xde, 0xcc, 0x4b, 0x00, 0xc1, 0x43, 0x3e, 0x4e, 0x52, 0x2e, 0x38, 0x33, 0x93,
-	0xa5, 0xff, 0x6d, 0xa0, 0xf1, 0xc8, 0x43, 0x8a, 0x9f, 0x79, 0xc8, 0x59, 0x0b, 0x66, 0x14, 0xba,
-	0x46, 0xdf, 0x18, 0x36, 0x02, 0x33, 0x0a, 0xd9, 0x19, 0xb0, 0x4a, 0x69, 0x21, 0x28, 0x7c, 0x59,
-	0x08, 0xd7, 0x54, 0x78, 0x43, 0x23, 0x53, 0x21, 0xe9, 0x75, 0x12, 0x6e, 0x68, 0x2b, 0xa7, 0x35,
-	0x32, 0x15, 0x8c, 0xc1, 0x16, 0xf4, 0x29, 0x5c, 0x5b, 0x11, 0xea, 0xcc, 0x3c, 0xd4, 0x57, 0xfc,
-	0x2d, 0x89, 0x49, 0x90, 0xfb, 0xaf, 0x6f, 0x0c, 0xeb, 0x41, 0x71, 0xf7, 0x2f, 0xe1, 0x3c, 0x44,
-	0x99, 0x08, 0xe8, 0x63, 0x4d, 0x99, 0x60, 0x3d, 0xd4, 0x5e, 0xa3, 0x58, 0x50, 0xaa, 0x07, 0xd2,
-	0x37, 0x7f, 0x8a, 0xff, 0x79, 0x59, 0x96, 0xf0, 0xf7, 0x8c, 0xd8, 0x39, 0xac, 0x94, 0x32, 0xd7,
-	0xe8, 0x5b, 0x43, 0x67, 0xd2, 0x1c, 0x27, 0xcb, 0x71, 0x61, 0x28, 0x90, 0x0c, 0xeb, 0xc0, 0xa2,
-	0x34, 0xd5, 0xe3, 0xcb, 0xa3, 0x7f, 0x0a, 0xcc, 0xa9, 0x68, 0x54, 0x71, 0xed, 0xdf, 0xc1, 0x51,
-	0x6c, 0x55, 0xdf, 0xf8, 0xb5, 0xfe, 0x35, 0x9c, 0x27, 0x5e, 0x3a, 0x19, 0xc0, 0x96, 0xb1, 0xef,
-	0x97, 0x50, 0x94, 0x34, 0x95, 0xbf, 0xf8, 0x7b, 0xd3, 0x01, 0xda, 0x33, 0x1d, 0xe5, 0x21, 0x67,
-	0x17, 0xe8, 0x94, 0x25, 0xba, 0x93, 0x16, 0x32, 0x4a, 0xa1, 0x1e, 0xba, 0xb3, 0x98, 0x16, 0x69,
-	0x45, 0xcd, 0x1f, 0xe1, 0xb8, 0x82, 0x1f, 0x92, 0x98, 0x7c, 0x99, 0xb0, 0xd5, 0x17, 0x35, 0x82,
-	0x2d, 0x97, 0xc5, 0xda, 0xd2, 0xc2, 0xd6, 0x76, 0xbd, 0x4e, 0x09, 0x68, 0x95, 0x2b, 0x58, 0x73,
-	0x12, 0xac, 0x25, 0x89, 0x72, 0x3b, 0x5e, 0xbb, 0xb8, 0xeb, 0xba, 0x11, 0x6c, 0x19, 0x55, 0x2e,
-	0xb9, 0x15, 0x73, 0x2e, 0xb9, 0x93, 0xe2, 0x2d, 0xea, 0x9b, 0x61, 0xd9, 0x91, 0x64, 0x2b, 0x96,
-	0xbc, 0xee, 0x2e, 0xa8, 0x9f, 0xdd, 0xa3, 0xb9, 0x63, 0x94, 0xb9, 0xaa, 0x6c, 0x4f, 0x26, 0xde,
-	0xc9, 0x1e, 0x26, 0x57, 0x59, 0xd6, 0xd4, 0x5f, 0x76, 0xf3, 0x13, 0x00, 0x00, 0xff, 0xff, 0xaf,
-	0x10, 0x10, 0x14, 0x73, 0x03, 0x00, 0x00,
+	// 439 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x5d, 0x6b, 0xd4, 0x40,
+	0x14, 0x25, 0x1f, 0x5d, 0x76, 0xcf, 0x76, 0xd3, 0xed, 0x6d, 0xa9, 0x21, 0x20, 0xed, 0x0e, 0x7e,
+	0x54, 0x90, 0x2d, 0x54, 0x7c, 0x15, 0xe3, 0xfa, 0xa8, 0x2f, 0x41, 0x9f, 0x65, 0xb7, 0x33, 0x42,
+	0x20, 0x3a, 0x31, 0x99, 0x82, 0x7f, 0xc1, 0x7f, 0xe9, 0x4f, 0x91, 0x99, 0xcc, 0xe4, 0x4b, 0x03,
+	0xd2, 0xb7, 0xcc, 0x39, 0xf7, 0xdc, 0x8f, 0x73, 0x2f, 0x01, 0x94, 0xe4, 0x72, 0x5b, 0x56, 0x52,
+	0x49, 0xf2, 0xcb, 0x03, 0xfb, 0xe5, 0x61, 0xf1, 0x51, 0x72, 0x51, 0x7c, 0x92, 0x5c, 0x52, 0x04,
+	0x3f, 0xe7, 0xb1, 0x77, 0xe5, 0x5d, 0x2f, 0x32, 0x3f, 0xe7, 0xf4, 0x18, 0xb8, 0xab, 0xc4, 0x5e,
+	0x09, 0xfe, 0x65, 0xaf, 0x62, 0xdf, 0xe0, 0x0b, 0x8b, 0xa4, 0x4a, 0xd3, 0xf7, 0x25, 0x77, 0x74,
+	0xd0, 0xd0, 0x16, 0x49, 0x15, 0x11, 0x42, 0x25, 0x7e, 0xaa, 0x38, 0x34, 0x84, 0xf9, 0xa6, 0x04,
+	0xf3, 0x3b, 0xf9, 0xad, 0x2c, 0x84, 0x12, 0xf1, 0xd1, 0x95, 0x77, 0x3d, 0xcf, 0xda, 0x37, 0xbb,
+	0x01, 0x52, 0xce, 0x33, 0xf1, 0xe3, 0x5e, 0xd4, 0x8a, 0x36, 0x08, 0x75, 0xaf, 0xa6, 0x9b, 0xe5,
+	0xed, 0x6a, 0x5b, 0x1e, 0xb6, 0x6d, 0xa3, 0x99, 0xa1, 0xd8, 0x5b, 0x2c, 0x8d, 0xa0, 0x2e, 0xe5,
+	0xf7, 0x5a, 0xd0, 0x25, 0x82, 0x4a, 0xd4, 0xff, 0x16, 0x68, 0x86, 0xd6, 0x08, 0x44, 0x55, 0xd9,
+	0x39, 0xf4, 0x27, 0xbb, 0xc4, 0xea, 0xbd, 0xd0, 0xc5, 0x5d, 0xd5, 0x91, 0x03, 0x8c, 0x21, 0x72,
+	0x01, 0xb6, 0x8a, 0x4d, 0xe2, 0x75, 0x49, 0xde, 0x61, 0xf5, 0xd9, 0x0c, 0x3d, 0x91, 0xa4, 0x1d,
+	0xc5, 0x9f, 0x1e, 0x65, 0x87, 0xc8, 0xe5, 0x78, 0xf8, 0x34, 0x4f, 0xb1, 0xfc, 0x90, 0xd7, 0xca,
+	0xb5, 0x71, 0x81, 0xd9, 0xd7, 0xbc, 0x50, 0xc2, 0x35, 0x6b, 0x5f, 0x2c, 0xc5, 0x71, 0x13, 0x36,
+	0xae, 0x14, 0xfc, 0x77, 0xa5, 0x0d, 0x4e, 0x76, 0x76, 0x6d, 0x53, 0xce, 0x3d, 0xc1, 0xba, 0x0b,
+	0x99, 0xf4, 0xee, 0x1c, 0xe4, 0xa2, 0xd2, 0xa2, 0xb0, 0xb9, 0xd8, 0x73, 0x9c, 0x0d, 0xd0, 0x49,
+	0x79, 0x84, 0xe3, 0x5d, 0x21, 0xf6, 0x95, 0x13, 0x6e, 0xb0, 0xb2, 0xef, 0x29, 0xc9, 0xed, 0x6f,
+	0x1f, 0xa1, 0x39, 0xf6, 0x67, 0x08, 0x52, 0xce, 0x29, 0xd2, 0x03, 0x77, 0x77, 0x97, 0x9c, 0xb4,
+	0x6f, 0x9b, 0xe2, 0x06, 0xb3, 0xe6, 0x04, 0xe8, 0x54, 0x53, 0x83, 0x7b, 0x49, 0xa8, 0x0f, 0x75,
+	0x82, 0x66, 0x97, 0x8d, 0x60, 0x70, 0x1b, 0x8d, 0x60, 0xb4, 0xea, 0x17, 0x08, 0xf5, 0x42, 0xc8,
+	0x94, 0xee, 0x6d, 0x30, 0x59, 0x77, 0x80, 0x0d, 0x7d, 0x8d, 0xb9, 0x73, 0x86, 0xce, 0x34, 0x3b,
+	0x5a, 0x43, 0x72, 0x3e, 0x04, 0xad, 0xec, 0x0d, 0x96, 0x3d, 0x43, 0xe9, 0xa2, 0x1f, 0xd4, 0xf9,
+	0x9e, 0x3c, 0xfa, 0x0b, 0xb7, 0xfa, 0x97, 0x38, 0x32, 0xbe, 0x92, 0xe9, 0xa8, 0x6f, 0x79, 0x72,
+	0xda, 0x43, 0x9a, 0xe8, 0xc3, 0xcc, 0xfc, 0x5f, 0x5e, 0xfd, 0x09, 0x00, 0x00, 0xff, 0xff, 0xf9,
+	0x5d, 0xc9, 0xe5, 0x6d, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -557,11 +721,13 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type TodoClient interface {
+	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
+	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
-	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
-	Post(ctx context.Context, in *PostRequest, opts ...grpc.CallOption) (*PostResponse, error)
 	Complete(ctx context.Context, in *CompleteRequest, opts ...grpc.CallOption) (*CompleteResponse, error)
-	ClearComplete(ctx context.Context, in *ClearCompleteRequest, opts ...grpc.CallOption) (*ClearCompleteResponse, error)
+	CompleteAll(ctx context.Context, in *CompleteAllRequest, opts ...grpc.CallOption) (*CompleteAllResponse, error)
+	Clear(ctx context.Context, in *ClearRequest, opts ...grpc.CallOption) (*ClearResponse, error)
 }
 
 type todoClient struct {
@@ -572,27 +738,36 @@ func NewTodoClient(cc *grpc.ClientConn) TodoClient {
 	return &todoClient{cc}
 }
 
+func (c *todoClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
+	out := new(AddResponse)
+	err := c.cc.Invoke(ctx, "/pb.Todo/Add", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *todoClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
+	out := new(DeleteResponse)
+	err := c.cc.Invoke(ctx, "/pb.Todo/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *todoClient) Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error) {
+	out := new(UpdateResponse)
+	err := c.cc.Invoke(ctx, "/pb.Todo/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *todoClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
 	out := new(ListResponse)
 	err := c.cc.Invoke(ctx, "/pb.Todo/List", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *todoClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
-	out := new(GetResponse)
-	err := c.cc.Invoke(ctx, "/pb.Todo/Get", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *todoClient) Post(ctx context.Context, in *PostRequest, opts ...grpc.CallOption) (*PostResponse, error) {
-	out := new(PostResponse)
-	err := c.cc.Invoke(ctx, "/pb.Todo/Post", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -608,9 +783,18 @@ func (c *todoClient) Complete(ctx context.Context, in *CompleteRequest, opts ...
 	return out, nil
 }
 
-func (c *todoClient) ClearComplete(ctx context.Context, in *ClearCompleteRequest, opts ...grpc.CallOption) (*ClearCompleteResponse, error) {
-	out := new(ClearCompleteResponse)
-	err := c.cc.Invoke(ctx, "/pb.Todo/ClearComplete", in, out, opts...)
+func (c *todoClient) CompleteAll(ctx context.Context, in *CompleteAllRequest, opts ...grpc.CallOption) (*CompleteAllResponse, error) {
+	out := new(CompleteAllResponse)
+	err := c.cc.Invoke(ctx, "/pb.Todo/CompleteAll", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *todoClient) Clear(ctx context.Context, in *ClearRequest, opts ...grpc.CallOption) (*ClearResponse, error) {
+	out := new(ClearResponse)
+	err := c.cc.Invoke(ctx, "/pb.Todo/Clear", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -619,35 +803,97 @@ func (c *todoClient) ClearComplete(ctx context.Context, in *ClearCompleteRequest
 
 // TodoServer is the server API for Todo service.
 type TodoServer interface {
+	Add(context.Context, *AddRequest) (*AddResponse, error)
+	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
 	List(context.Context, *ListRequest) (*ListResponse, error)
-	Get(context.Context, *GetRequest) (*GetResponse, error)
-	Post(context.Context, *PostRequest) (*PostResponse, error)
 	Complete(context.Context, *CompleteRequest) (*CompleteResponse, error)
-	ClearComplete(context.Context, *ClearCompleteRequest) (*ClearCompleteResponse, error)
+	CompleteAll(context.Context, *CompleteAllRequest) (*CompleteAllResponse, error)
+	Clear(context.Context, *ClearRequest) (*ClearResponse, error)
 }
 
 // UnimplementedTodoServer can be embedded to have forward compatible implementations.
 type UnimplementedTodoServer struct {
 }
 
+func (*UnimplementedTodoServer) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
+}
+func (*UnimplementedTodoServer) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (*UnimplementedTodoServer) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
 func (*UnimplementedTodoServer) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
-}
-func (*UnimplementedTodoServer) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
-}
-func (*UnimplementedTodoServer) Post(ctx context.Context, req *PostRequest) (*PostResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Post not implemented")
 }
 func (*UnimplementedTodoServer) Complete(ctx context.Context, req *CompleteRequest) (*CompleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Complete not implemented")
 }
-func (*UnimplementedTodoServer) ClearComplete(ctx context.Context, req *ClearCompleteRequest) (*ClearCompleteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ClearComplete not implemented")
+func (*UnimplementedTodoServer) CompleteAll(ctx context.Context, req *CompleteAllRequest) (*CompleteAllResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CompleteAll not implemented")
+}
+func (*UnimplementedTodoServer) Clear(ctx context.Context, req *ClearRequest) (*ClearResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Clear not implemented")
 }
 
 func RegisterTodoServer(s *grpc.Server, srv TodoServer) {
 	s.RegisterService(&_Todo_serviceDesc, srv)
+}
+
+func _Todo_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TodoServer).Add(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Todo/Add",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TodoServer).Add(ctx, req.(*AddRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Todo_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TodoServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Todo/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TodoServer).Delete(ctx, req.(*DeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Todo_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TodoServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Todo/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TodoServer).Update(ctx, req.(*UpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Todo_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -664,42 +910,6 @@ func _Todo_List_Handler(srv interface{}, ctx context.Context, dec func(interface
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TodoServer).List(ctx, req.(*ListRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Todo_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TodoServer).Get(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/pb.Todo/Get",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TodoServer).Get(ctx, req.(*GetRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Todo_Post_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PostRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TodoServer).Post(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/pb.Todo/Post",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TodoServer).Post(ctx, req.(*PostRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -722,20 +932,38 @@ func _Todo_Complete_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Todo_ClearComplete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ClearCompleteRequest)
+func _Todo_CompleteAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompleteAllRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TodoServer).ClearComplete(ctx, in)
+		return srv.(TodoServer).CompleteAll(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.Todo/ClearComplete",
+		FullMethod: "/pb.Todo/CompleteAll",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TodoServer).ClearComplete(ctx, req.(*ClearCompleteRequest))
+		return srv.(TodoServer).CompleteAll(ctx, req.(*CompleteAllRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Todo_Clear_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ClearRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TodoServer).Clear(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Todo/Clear",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TodoServer).Clear(ctx, req.(*ClearRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -745,24 +973,32 @@ var _Todo_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*TodoServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "Add",
+			Handler:    _Todo_Add_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _Todo_Delete_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _Todo_Update_Handler,
+		},
+		{
 			MethodName: "List",
 			Handler:    _Todo_List_Handler,
-		},
-		{
-			MethodName: "Get",
-			Handler:    _Todo_Get_Handler,
-		},
-		{
-			MethodName: "Post",
-			Handler:    _Todo_Post_Handler,
 		},
 		{
 			MethodName: "Complete",
 			Handler:    _Todo_Complete_Handler,
 		},
 		{
-			MethodName: "ClearComplete",
-			Handler:    _Todo_ClearComplete_Handler,
+			MethodName: "CompleteAll",
+			Handler:    _Todo_CompleteAll_Handler,
+		},
+		{
+			MethodName: "Clear",
+			Handler:    _Todo_Clear_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

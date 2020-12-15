@@ -45,7 +45,7 @@ func TestGrpcServer_Post(t *testing.T) {
 			name: "grpc add todo",
 			prepare: func(f *fields) {
 				gomock.InOrder(
-					f.svc.EXPECT().Post(gomock.Any(), gomock.Any()).Return(model.Todo{
+					f.svc.EXPECT().Add(gomock.Any(), gomock.Any()).Return(model.Todo{
 						ID:        "iKe0KxpurIn0E_6vzUDAr",
 						CreatedAt: time.Now(),
 						UpdatedAt: time.Now(),
@@ -100,7 +100,7 @@ func TestGrpcServer_Post(t *testing.T) {
 			}
 			svc := transports.NewGRPCClient(cc, tracer, zkt, logger)
 
-			if res, err := svc.Post(context.Background(), tt.args.todo); (err != nil) != tt.wantErr {
+			if res, err := svc.Add(context.Background(), tt.args.todo); (err != nil) != tt.wantErr {
 				t.Errorf("svc.Post error = %v, wantErr %v", err, tt.wantErr)
 			} else {
 				if tt.checkFunc != nil {
@@ -109,20 +109,4 @@ func TestGrpcServer_Post(t *testing.T) {
 			}
 		})
 	}
-}
-
-func TestGrpcServer_Get(t *testing.T) {
-
-}
-
-func TestGrpcServer_List(t *testing.T) {
-
-}
-
-func TestGrpcServer_Complete(t *testing.T) {
-
-}
-
-func TestGrpcServer_ClearComplete(t *testing.T) {
-
 }

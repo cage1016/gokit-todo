@@ -1,23 +1,36 @@
-### list todos
-GET /items?q=all
-Host: localhost:8180
-
-### get todo
-GET /items/0EO5SViJKeCO8RvsBeZE2
-Host: localhost:8180
-
-### post todo
+### Add: /items
 POST /items
 Host: localhost:8180
 
 {
-    "text": "3333d"
+    "text": "000"
 }
-### Complete
-PUT /items/NYYPKSWKho3xVCiV1RHRX
+
+### Delete: /items/:id
+DELETE /items/cmD6HQYo-2iDtQfbcvCWm
 Host: localhost:8180
 
-### clear complete
+### Update: /items/:id
+PUT /items/jzYddopd58e5x-eDBaBWb
+Host: localhost:8180
 
+{
+    "id": "jzYddopd58e5x-eDBaBWb",
+    "text": "111"
+}
+
+### List: /items
+GET /items?filter=all
+Host: localhost:8180
+
+### Complete: /items/completes/:id
+POST /items/completes/LLUFTe1PDxMrFziXLZ1ST
+Host: localhost:8180
+
+### CompleteAll: /items/completes
+POST /items/completes
+Host: localhost:8180
+
+### Clear: /items/clear
 POST /items/clear
 Host: localhost:8180

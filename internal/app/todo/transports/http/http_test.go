@@ -23,7 +23,7 @@ import (
 	test "github.com/cage1016/todo/test/util"
 )
 
-func TestPostHandler(t *testing.T) {
+func TestAddHandler(t *testing.T) {
 	type fields struct {
 		svc *automocks.MockTodoService
 	}
@@ -43,7 +43,7 @@ func TestPostHandler(t *testing.T) {
 			name: "add todo",
 			prepare: func(f *fields) {
 				gomock.InOrder(
-					f.svc.EXPECT().Post(gomock.Any(), gomock.Any()).Return(model.Todo{
+					f.svc.EXPECT().Add(gomock.Any(), gomock.Any()).Return(model.Todo{
 						ID:        "iKe0KxpurIn0E_6vzUDAr",
 						CreatedAt: time.Now(),
 						UpdatedAt: time.Now(),
@@ -103,20 +103,4 @@ func TestPostHandler(t *testing.T) {
 			}
 		})
 	}
-}
-
-func TestListHandler(t *testing.T) {
-
-}
-
-func TestGetHandler(t *testing.T) {
-
-}
-
-func TestCompleteHandler(t *testing.T) {
-
-}
-
-func TestClearCompleteHandler(t *testing.T) {
-
 }

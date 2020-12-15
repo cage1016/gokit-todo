@@ -17,18 +17,47 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/cage1016/todo/internal/app/todo/endpoints"
-	"github.com/cage1016/todo/internal/app/todo/model"
 	"github.com/cage1016/todo/internal/app/todo/service"
 	"github.com/cage1016/todo/internal/pkg/errors"
 	pb "github.com/cage1016/todo/pb/todo"
+	"github.com/cage1016/todo/internal/app/todo/model"
 )
 
 type grpcServer struct {
-	list          grpctransport.Handler `json:""`
-	get           grpctransport.Handler `json:""`
-	post          grpctransport.Handler `json:""`
-	complete      grpctransport.Handler `json:""`
-	clearComplete grpctransport.Handler `json:""`
+	add         grpctransport.Handler `json:""`
+	delete      grpctransport.Handler `json:""`
+	update      grpctransport.Handler `json:""`
+	list        grpctransport.Handler `json:""`
+	complete    grpctransport.Handler `json:""`
+	completeAll grpctransport.Handler `json:""`
+	clear       grpctransport.Handler `json:""`
+}
+
+func (s *grpcServer) Add(ctx context.Context, req *pb.AddRequest) (rep *pb.AddResponse, err error) {
+	_, rp, err := s.add.ServeGRPC(ctx, req)
+	if err != nil {
+		return nil, grpcEncodeError(errors.Cast(err))
+	}
+	rep = rp.(*pb.AddResponse)
+	return rep, nil
+}
+
+func (s *grpcServer) Delete(ctx context.Context, req *pb.DeleteRequest) (rep *pb.DeleteResponse, err error) {
+	_, rp, err := s.delete.ServeGRPC(ctx, req)
+	if err != nil {
+		return nil, grpcEncodeError(errors.Cast(err))
+	}
+	rep = rp.(*pb.DeleteResponse)
+	return rep, nil
+}
+
+func (s *grpcServer) Update(ctx context.Context, req *pb.UpdateRequest) (rep *pb.UpdateResponse, err error) {
+	_, rp, err := s.update.ServeGRPC(ctx, req)
+	if err != nil {
+		return nil, grpcEncodeError(errors.Cast(err))
+	}
+	rep = rp.(*pb.UpdateResponse)
+	return rep, nil
 }
 
 func (s *grpcServer) List(ctx context.Context, req *pb.ListRequest) (rep *pb.ListResponse, err error) {
@@ -37,24 +66,6 @@ func (s *grpcServer) List(ctx context.Context, req *pb.ListRequest) (rep *pb.Lis
 		return nil, grpcEncodeError(errors.Cast(err))
 	}
 	rep = rp.(*pb.ListResponse)
-	return rep, nil
-}
-
-func (s *grpcServer) Get(ctx context.Context, req *pb.GetRequest) (rep *pb.GetResponse, err error) {
-	_, rp, err := s.get.ServeGRPC(ctx, req)
-	if err != nil {
-		return nil, grpcEncodeError(errors.Cast(err))
-	}
-	rep = rp.(*pb.GetResponse)
-	return rep, nil
-}
-
-func (s *grpcServer) Post(ctx context.Context, req *pb.PostRequest) (rep *pb.PostResponse, err error) {
-	_, rp, err := s.post.ServeGRPC(ctx, req)
-	if err != nil {
-		return nil, grpcEncodeError(errors.Cast(err))
-	}
-	rep = rp.(*pb.PostResponse)
 	return rep, nil
 }
 
@@ -67,12 +78,21 @@ func (s *grpcServer) Complete(ctx context.Context, req *pb.CompleteRequest) (rep
 	return rep, nil
 }
 
-func (s *grpcServer) ClearComplete(ctx context.Context, req *pb.ClearCompleteRequest) (rep *pb.ClearCompleteResponse, err error) {
-	_, rp, err := s.clearComplete.ServeGRPC(ctx, req)
+func (s *grpcServer) CompleteAll(ctx context.Context, req *pb.CompleteAllRequest) (rep *pb.CompleteAllResponse, err error) {
+	_, rp, err := s.completeAll.ServeGRPC(ctx, req)
 	if err != nil {
 		return nil, grpcEncodeError(errors.Cast(err))
 	}
-	rep = rp.(*pb.ClearCompleteResponse)
+	rep = rp.(*pb.CompleteAllResponse)
+	return rep, nil
+}
+
+func (s *grpcServer) Clear(ctx context.Context, req *pb.ClearRequest) (rep *pb.ClearResponse, err error) {
+	_, rp, err := s.clear.ServeGRPC(ctx, req)
+	if err != nil {
+		return nil, grpcEncodeError(errors.Cast(err))
+	}
+	rep = rp.(*pb.ClearResponse)
 	return rep, nil
 }
 
@@ -94,25 +114,32 @@ func MakeGRPCServer(endpoints endpoints.Endpoints, otTracer stdopentracing.Trace
 	}
 
 	return &grpcServer{
+		add: grpctransport.NewServer(
+			endpoints.AddEndpoint,
+			decodeGRPCAddRequest,
+			encodeGRPCAddResponse,
+			append(options, grpctransport.ServerBefore(opentracing.GRPCToContext(otTracer, "Add", logger), kitjwt.GRPCToContext()))...,
+		),
+
+		delete: grpctransport.NewServer(
+			endpoints.DeleteEndpoint,
+			decodeGRPCDeleteRequest,
+			encodeGRPCDeleteResponse,
+			append(options, grpctransport.ServerBefore(opentracing.GRPCToContext(otTracer, "Delete", logger), kitjwt.GRPCToContext()))...,
+		),
+
+		update: grpctransport.NewServer(
+			endpoints.UpdateEndpoint,
+			decodeGRPCUpdateRequest,
+			encodeGRPCUpdateResponse,
+			append(options, grpctransport.ServerBefore(opentracing.GRPCToContext(otTracer, "Update", logger), kitjwt.GRPCToContext()))...,
+		),
+
 		list: grpctransport.NewServer(
 			endpoints.ListEndpoint,
 			decodeGRPCListRequest,
 			encodeGRPCListResponse,
 			append(options, grpctransport.ServerBefore(opentracing.GRPCToContext(otTracer, "List", logger), kitjwt.GRPCToContext()))...,
-		),
-
-		get: grpctransport.NewServer(
-			endpoints.GetEndpoint,
-			decodeGRPCGetRequest,
-			encodeGRPCGetResponse,
-			append(options, grpctransport.ServerBefore(opentracing.GRPCToContext(otTracer, "Get", logger), kitjwt.GRPCToContext()))...,
-		),
-
-		post: grpctransport.NewServer(
-			endpoints.PostEndpoint,
-			decodeGRPCPostRequest,
-			encodeGRPCPostResponse,
-			append(options, grpctransport.ServerBefore(opentracing.GRPCToContext(otTracer, "Post", logger), kitjwt.GRPCToContext()))...,
 		),
 
 		complete: grpctransport.NewServer(
@@ -122,13 +149,62 @@ func MakeGRPCServer(endpoints endpoints.Endpoints, otTracer stdopentracing.Trace
 			append(options, grpctransport.ServerBefore(opentracing.GRPCToContext(otTracer, "Complete", logger), kitjwt.GRPCToContext()))...,
 		),
 
-		clearComplete: grpctransport.NewServer(
-			endpoints.ClearCompleteEndpoint,
-			decodeGRPCClearCompleteRequest,
-			encodeGRPCClearCompleteResponse,
-			append(options, grpctransport.ServerBefore(opentracing.GRPCToContext(otTracer, "ClearComplete", logger), kitjwt.GRPCToContext()))...,
+		completeAll: grpctransport.NewServer(
+			endpoints.CompleteAllEndpoint,
+			decodeGRPCCompleteAllRequest,
+			encodeGRPCCompleteAllResponse,
+			append(options, grpctransport.ServerBefore(opentracing.GRPCToContext(otTracer, "CompleteAll", logger), kitjwt.GRPCToContext()))...,
+		),
+
+		clear: grpctransport.NewServer(
+			endpoints.ClearEndpoint,
+			decodeGRPCClearRequest,
+			encodeGRPCClearResponse,
+			append(options, grpctransport.ServerBefore(opentracing.GRPCToContext(otTracer, "Clear", logger), kitjwt.GRPCToContext()))...,
 		),
 	}
+}
+
+// decodeGRPCAddRequest is a transport/grpc.DecodeRequestFunc that converts a
+// gRPC request to a user-domain request. Primarily useful in a server.
+func decodeGRPCAddRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
+	req := grpcReq.(*pb.AddRequest)
+	return endpoints.AddRequest{Todo: PBtoModelTodo(req.Todo)}, nil
+}
+
+// encodeGRPCAddResponse is a transport/grpc.EncodeResponseFunc that converts a
+// user-domain response to a gRPC reply. Primarily useful in a server.
+func encodeGRPCAddResponse(_ context.Context, grpcReply interface{}) (res interface{}, err error) {
+	reply := grpcReply.(endpoints.AddResponse)
+	return &pb.AddResponse{Res: ModelToPBTodo(reply.Res)}, grpcEncodeError(errors.Cast(reply.Err))
+}
+
+// decodeGRPCDeleteRequest is a transport/grpc.DecodeRequestFunc that converts a
+// gRPC request to a user-domain request. Primarily useful in a server.
+func decodeGRPCDeleteRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
+	req := grpcReq.(*pb.DeleteRequest)
+	return endpoints.DeleteRequest{Id: req.Id}, nil
+}
+
+// encodeGRPCDeleteResponse is a transport/grpc.EncodeResponseFunc that converts a
+// user-domain response to a gRPC reply. Primarily useful in a server.
+func encodeGRPCDeleteResponse(_ context.Context, grpcReply interface{}) (res interface{}, err error) {
+	reply := grpcReply.(endpoints.DeleteResponse)
+	return &pb.DeleteResponse{}, grpcEncodeError(errors.Cast(reply.Err))
+}
+
+// decodeGRPCUpdateRequest is a transport/grpc.DecodeRequestFunc that converts a
+// gRPC request to a user-domain request. Primarily useful in a server.
+func decodeGRPCUpdateRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
+	req := grpcReq.(*pb.UpdateRequest)
+	return endpoints.UpdateRequest{Id: req.Id, Todo: PBtoModelTodo(req.Todo)}, nil
+}
+
+// encodeGRPCUpdateResponse is a transport/grpc.EncodeResponseFunc that converts a
+// user-domain response to a gRPC reply. Primarily useful in a server.
+func encodeGRPCUpdateResponse(_ context.Context, grpcReply interface{}) (res interface{}, err error) {
+	reply := grpcReply.(endpoints.UpdateResponse)
+	return &pb.UpdateResponse{Res: ModelToPBTodo(reply.Res)}, grpcEncodeError(errors.Cast(reply.Err))
 }
 
 // decodeGRPCListRequest is a transport/grpc.DecodeRequestFunc that converts a
@@ -154,34 +230,6 @@ func encodeGRPCListResponse(_ context.Context, grpcReply interface{}) (res inter
 	return &pb.ListResponse{Res: todos}, grpcEncodeError(errors.Cast(reply.Err))
 }
 
-// decodeGRPCGetRequest is a transport/grpc.DecodeRequestFunc that converts a
-// gRPC request to a user-domain request. Primarily useful in a server.
-func decodeGRPCGetRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
-	req := grpcReq.(*pb.GetRequest)
-	return endpoints.GetRequest{Id: req.Id}, nil
-}
-
-// encodeGRPCGetResponse is a transport/grpc.EncodeResponseFunc that converts a
-// user-domain response to a gRPC reply. Primarily useful in a server.
-func encodeGRPCGetResponse(_ context.Context, grpcReply interface{}) (res interface{}, err error) {
-	reply := grpcReply.(endpoints.GetResponse)
-	return &pb.GetResponse{Res: ModelToPBTodo(reply.Res)}, grpcEncodeError(errors.Cast(reply.Err))
-}
-
-// decodeGRPCPostRequest is a transport/grpc.DecodeRequestFunc that converts a
-// gRPC request to a user-domain request. Primarily useful in a server.
-func decodeGRPCPostRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
-	req := grpcReq.(*pb.PostRequest)
-	return endpoints.PostRequest{Todo: PBtoModelTodo(req.Todo)}, nil
-}
-
-// encodeGRPCPostResponse is a transport/ModelTodo(todo *pb.Modeltogrpc.EncodeResponseFunc that converts a
-// user-domain response to a gRPC reply. Primarily useful in a server.
-func encodeGRPCPostResponse(_ context.Context, grpcReply interface{}) (res interface{}, err error) {
-	reply := grpcReply.(endpoints.PostResponse)
-	return &pb.PostResponse{Res: ModelToPBTodo(reply.Res)}, grpcEncodeError(errors.Cast(reply.Err))
-}
-
 // decodeGRPCCompleteRequest is a transport/grpc.DecodeRequestFunc that converts a
 // gRPC request to a user-domain request. Primarily useful in a server.
 func decodeGRPCCompleteRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
@@ -196,18 +244,32 @@ func encodeGRPCCompleteResponse(_ context.Context, grpcReply interface{}) (res i
 	return &pb.CompleteResponse{}, grpcEncodeError(errors.Cast(reply.Err))
 }
 
-// decodeGRPCClearCompleteRequest is a transport/grpc.DecodeRequestFunc that converts a
+// decodeGRPCCompleteAllRequest is a transport/grpc.DecodeRequestFunc that converts a
 // gRPC request to a user-domain request. Primarily useful in a server.
-func decodeGRPCClearCompleteRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
-	_ = grpcReq.(*pb.ClearCompleteRequest)
-	return endpoints.ClearCompleteRequest{}, nil
+func decodeGRPCCompleteAllRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
+	_ = grpcReq.(*pb.CompleteAllRequest)
+	return endpoints.CompleteAllRequest{}, nil
 }
 
-// encodeGRPCClearCompleteResponse is a transport/grpc.EncodeResponseFunc that converts a
+// encodeGRPCCompleteAllResponse is a transport/grpc.EncodeResponseFunc that converts a
 // user-domain response to a gRPC reply. Primarily useful in a server.
-func encodeGRPCClearCompleteResponse(_ context.Context, grpcReply interface{}) (res interface{}, err error) {
-	reply := grpcReply.(endpoints.ClearCompleteResponse)
-	return &pb.ClearCompleteResponse{}, grpcEncodeError(errors.Cast(reply.Err))
+func encodeGRPCCompleteAllResponse(_ context.Context, grpcReply interface{}) (res interface{}, err error) {
+	reply := grpcReply.(endpoints.CompleteAllResponse)
+	return &pb.CompleteAllResponse{}, grpcEncodeError(errors.Cast(reply.Err))
+}
+
+// decodeGRPCClearRequest is a transport/grpc.DecodeRequestFunc that converts a
+// gRPC request to a user-domain request. Primarily useful in a server.
+func decodeGRPCClearRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
+	_ = grpcReq.(*pb.ClearRequest)
+	return endpoints.ClearRequest{}, nil
+}
+
+// encodeGRPCClearResponse is a transport/grpc.EncodeResponseFunc that converts a
+// user-domain response to a gRPC reply. Primarily useful in a server.
+func encodeGRPCClearResponse(_ context.Context, grpcReply interface{}) (res interface{}, err error) {
+	reply := grpcReply.(endpoints.ClearResponse)
+	return &pb.ClearResponse{}, grpcEncodeError(errors.Cast(reply.Err))
 }
 
 // NewGRPCClient returns an AddService backed by a gRPC server at the other end
@@ -228,6 +290,54 @@ func NewGRPCClient(conn *grpc.ClientConn, otTracer stdopentracing.Tracer, zipkin
 		zipkinClient,
 	}
 
+	// The Add endpoint is the same thing, with slightly different
+	// middlewares to demonstrate how to specialize per-endpoint.
+	var addEndpoint endpoint.Endpoint
+	{
+		addEndpoint = grpctransport.NewClient(
+			conn,
+			"pb.Todo",
+			"Add",
+			encodeGRPCAddRequest,
+			decodeGRPCAddResponse,
+			pb.AddResponse{},
+			append(options, grpctransport.ClientBefore(opentracing.ContextToGRPC(otTracer, logger), kitjwt.ContextToGRPC()))...,
+		).Endpoint()
+		addEndpoint = opentracing.TraceClient(otTracer, "Add")(addEndpoint)
+	}
+
+	// The Delete endpoint is the same thing, with slightly different
+	// middlewares to demonstrate how to specialize per-endpoint.
+	var deleteEndpoint endpoint.Endpoint
+	{
+		deleteEndpoint = grpctransport.NewClient(
+			conn,
+			"pb.Todo",
+			"Delete",
+			encodeGRPCDeleteRequest,
+			decodeGRPCDeleteResponse,
+			pb.DeleteResponse{},
+			append(options, grpctransport.ClientBefore(opentracing.ContextToGRPC(otTracer, logger), kitjwt.ContextToGRPC()))...,
+		).Endpoint()
+		deleteEndpoint = opentracing.TraceClient(otTracer, "Delete")(deleteEndpoint)
+	}
+
+	// The Update endpoint is the same thing, with slightly different
+	// middlewares to demonstrate how to specialize per-endpoint.
+	var updateEndpoint endpoint.Endpoint
+	{
+		updateEndpoint = grpctransport.NewClient(
+			conn,
+			"pb.Todo",
+			"Update",
+			encodeGRPCUpdateRequest,
+			decodeGRPCUpdateResponse,
+			pb.UpdateResponse{},
+			append(options, grpctransport.ClientBefore(opentracing.ContextToGRPC(otTracer, logger), kitjwt.ContextToGRPC()))...,
+		).Endpoint()
+		updateEndpoint = opentracing.TraceClient(otTracer, "Update")(updateEndpoint)
+	}
+
 	// The List endpoint is the same thing, with slightly different
 	// middlewares to demonstrate how to specialize per-endpoint.
 	var listEndpoint endpoint.Endpoint
@@ -242,38 +352,6 @@ func NewGRPCClient(conn *grpc.ClientConn, otTracer stdopentracing.Tracer, zipkin
 			append(options, grpctransport.ClientBefore(opentracing.ContextToGRPC(otTracer, logger), kitjwt.ContextToGRPC()))...,
 		).Endpoint()
 		listEndpoint = opentracing.TraceClient(otTracer, "List")(listEndpoint)
-	}
-
-	// The Get endpoint is the same thing, with slightly different
-	// middlewares to demonstrate how to specialize per-endpoint.
-	var getEndpoint endpoint.Endpoint
-	{
-		getEndpoint = grpctransport.NewClient(
-			conn,
-			"pb.Todo",
-			"Get",
-			encodeGRPCGetRequest,
-			decodeGRPCGetResponse,
-			pb.GetResponse{},
-			append(options, grpctransport.ClientBefore(opentracing.ContextToGRPC(otTracer, logger), kitjwt.ContextToGRPC()))...,
-		).Endpoint()
-		getEndpoint = opentracing.TraceClient(otTracer, "Get")(getEndpoint)
-	}
-
-	// The Post endpoint is the same thing, with slightly different
-	// middlewares to demonstrate how to specialize per-endpoint.
-	var postEndpoint endpoint.Endpoint
-	{
-		postEndpoint = grpctransport.NewClient(
-			conn,
-			"pb.Todo",
-			"Post",
-			encodeGRPCPostRequest,
-			decodeGRPCPostResponse,
-			pb.PostResponse{},
-			append(options, grpctransport.ClientBefore(opentracing.ContextToGRPC(otTracer, logger), kitjwt.ContextToGRPC()))...,
-		).Endpoint()
-		postEndpoint = opentracing.TraceClient(otTracer, "Post")(postEndpoint)
 	}
 
 	// The Complete endpoint is the same thing, with slightly different
@@ -292,36 +370,96 @@ func NewGRPCClient(conn *grpc.ClientConn, otTracer stdopentracing.Tracer, zipkin
 		completeEndpoint = opentracing.TraceClient(otTracer, "Complete")(completeEndpoint)
 	}
 
-	// The ClearComplete endpoint is the same thing, with slightly different
+	// The CompleteAll endpoint is the same thing, with slightly different
 	// middlewares to demonstrate how to specialize per-endpoint.
-	var clearCompleteEndpoint endpoint.Endpoint
+	var completeAllEndpoint endpoint.Endpoint
 	{
-		clearCompleteEndpoint = grpctransport.NewClient(
+		completeAllEndpoint = grpctransport.NewClient(
 			conn,
 			"pb.Todo",
-			"ClearComplete",
-			encodeGRPCClearCompleteRequest,
-			decodeGRPCClearCompleteResponse,
-			pb.ClearCompleteResponse{},
+			"CompleteAll",
+			encodeGRPCCompleteAllRequest,
+			decodeGRPCCompleteAllResponse,
+			pb.CompleteAllResponse{},
 			append(options, grpctransport.ClientBefore(opentracing.ContextToGRPC(otTracer, logger), kitjwt.ContextToGRPC()))...,
 		).Endpoint()
-		clearCompleteEndpoint = opentracing.TraceClient(otTracer, "ClearComplete")(clearCompleteEndpoint)
+		completeAllEndpoint = opentracing.TraceClient(otTracer, "CompleteAll")(completeAllEndpoint)
+	}
+
+	// The Clear endpoint is the same thing, with slightly different
+	// middlewares to demonstrate how to specialize per-endpoint.
+	var clearEndpoint endpoint.Endpoint
+	{
+		clearEndpoint = grpctransport.NewClient(
+			conn,
+			"pb.Todo",
+			"Clear",
+			encodeGRPCClearRequest,
+			decodeGRPCClearResponse,
+			pb.ClearResponse{},
+			append(options, grpctransport.ClientBefore(opentracing.ContextToGRPC(otTracer, logger), kitjwt.ContextToGRPC()))...,
+		).Endpoint()
+		clearEndpoint = opentracing.TraceClient(otTracer, "Clear")(clearEndpoint)
 	}
 
 	return endpoints.Endpoints{
-		ListEndpoint:          listEndpoint,
-		GetEndpoint:           getEndpoint,
-		PostEndpoint:          postEndpoint,
-		CompleteEndpoint:      completeEndpoint,
-		ClearCompleteEndpoint: clearCompleteEndpoint,
+		AddEndpoint:         addEndpoint,
+		DeleteEndpoint:      deleteEndpoint,
+		UpdateEndpoint:      updateEndpoint,
+		ListEndpoint:        listEndpoint,
+		CompleteEndpoint:    completeEndpoint,
+		CompleteAllEndpoint: completeAllEndpoint,
+		ClearEndpoint:       clearEndpoint,
 	}
+}
+
+// encodeGRPCAddRequest is a transport/grpc.EncodeRequestFunc that converts a
+// user-domain Add request to a gRPC Add request. Primarily useful in a client.
+func encodeGRPCAddRequest(_ context.Context, request interface{}) (interface{}, error) {
+	req := request.(endpoints.AddRequest)
+	return &pb.AddRequest{Todo: ModelToPBTodo(req.Todo)}, nil
+}
+
+// decodeGRPCAddResponse is a transport/grpc.DecodeResponseFunc that converts a
+// gRPC Add reply to a user-domain Add response. Primarily useful in a client.
+func decodeGRPCAddResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
+	reply := grpcReply.(*pb.AddResponse)
+	return endpoints.AddResponse{Res: PBtoModelTodo(reply.Res)}, nil
+}
+
+// encodeGRPCDeleteRequest is a transport/grpc.EncodeRequestFunc that converts a
+// user-domain Delete request to a gRPC Delete request. Primarily useful in a client.
+func encodeGRPCDeleteRequest(_ context.Context, request interface{}) (interface{}, error) {
+	req := request.(endpoints.DeleteRequest)
+	return &pb.DeleteRequest{Id: req.Id}, nil
+}
+
+// decodeGRPCDeleteResponse is a transport/grpc.DecodeResponseFunc that converts a
+// gRPC Delete reply to a user-domain Delete response. Primarily useful in a client.
+func decodeGRPCDeleteResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
+	_ = grpcReply.(*pb.DeleteResponse)
+	return endpoints.DeleteResponse{}, nil
+}
+
+// encodeGRPCUpdateRequest is a transport/grpc.EncodeRequestFunc that converts a
+// user-domain Update request to a gRPC Update request. Primarily useful in a client.
+func encodeGRPCUpdateRequest(_ context.Context, request interface{}) (interface{}, error) {
+	req := request.(endpoints.UpdateRequest)
+	return &pb.UpdateRequest{Id: req.Id, Todo: ModelToPBTodo(req.Todo)}, nil
+}
+
+// decodeGRPCUpdateResponse is a transport/grpc.DecodeResponseFunc that converts a
+// gRPC Update reply to a user-domain Update response. Primarily useful in a client.
+func decodeGRPCUpdateResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
+	reply := grpcReply.(*pb.UpdateResponse)
+	return endpoints.UpdateResponse{Res: PBtoModelTodo(reply.Res)}, nil
 }
 
 // encodeGRPCListRequest is a transport/grpc.EncodeRequestFunc that converts a
 // user-domain List request to a gRPC List request. Primarily useful in a client.
 func encodeGRPCListRequest(_ context.Context, request interface{}) (interface{}, error) {
-	_ = request.(endpoints.ListRequest)
-	return &pb.ListRequest{}, nil
+	req := request.(endpoints.ListRequest)
+	return &pb.ListRequest{Filter: req.Filter}, nil
 }
 
 // decodeGRPCListResponse is a transport/grpc.DecodeResponseFunc that converts a
@@ -335,34 +473,6 @@ func decodeGRPCListResponse(_ context.Context, grpcReply interface{}) (interface
 	}
 
 	return endpoints.ListResponse{Res: todos}, nil
-}
-
-// encodeGRPCGetRequest is a transport/grpc.EncodeRequestFunc that converts a
-// user-domain Get request to a gRPC Get request. Primarily useful in a client.
-func encodeGRPCGetRequest(_ context.Context, request interface{}) (interface{}, error) {
-	req := request.(endpoints.GetRequest)
-	return &pb.GetRequest{Id: req.Id}, nil
-}
-
-// decodeGRPCGetResponse is a transport/grpc.DecodeResponseFunc that converts a
-// gRPC Get reply to a user-domain Get response. Primarily useful in a client.
-func decodeGRPCGetResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
-	reply := grpcReply.(*pb.GetResponse)
-	return endpoints.GetResponse{Res: PBtoModelTodo(reply.Res)}, nil
-}
-
-// encodeGRPCPostRequest is a transport/grpc.EncodeRequestFunc that converts a
-// user-domain Post request to a gRPC Post request. Primarily useful in a client.
-func encodeGRPCPostRequest(_ context.Context, request interface{}) (interface{}, error) {
-	req := request.(endpoints.PostRequest)
-	return &pb.PostRequest{Todo: ModelToPBTodo(req.Todo)}, nil
-}
-
-// decodeGRPCPostResponse is a transport/grpc.DecodeResponseFunc that converts a
-// gRPC Post reply to a user-domain Post response. Primarily useful in a client.
-func decodeGRPCPostResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
-	reply := grpcReply.(*pb.PostResponse)
-	return endpoints.PostResponse{Res: PBtoModelTodo(reply.Res)}, nil
 }
 
 // encodeGRPCCompleteRequest is a transport/grpc.EncodeRequestFunc that converts a
@@ -379,18 +489,32 @@ func decodeGRPCCompleteResponse(_ context.Context, grpcReply interface{}) (inter
 	return endpoints.CompleteResponse{}, nil
 }
 
-// encodeGRPCClearCompleteRequest is a transport/grpc.EncodeRequestFunc that converts a
-// user-domain ClearComplete request to a gRPC ClearComplete request. Primarily useful in a client.
-func encodeGRPCClearCompleteRequest(_ context.Context, request interface{}) (interface{}, error) {
-	_ = request.(endpoints.ClearCompleteRequest)
-	return &pb.ClearCompleteRequest{}, nil
+// encodeGRPCCompleteAllRequest is a transport/grpc.EncodeRequestFunc that converts a
+// user-domain CompleteAll request to a gRPC CompleteAll request. Primarily useful in a client.
+func encodeGRPCCompleteAllRequest(_ context.Context, request interface{}) (interface{}, error) {
+	_ = request.(endpoints.CompleteAllRequest)
+	return &pb.CompleteAllRequest{}, nil
 }
 
-// decodeGRPCClearCompleteResponse is a transport/grpc.DecodeResponseFunc that converts a
-// gRPC ClearComplete reply to a user-domain ClearComplete response. Primarily useful in a client.
-func decodeGRPCClearCompleteResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
-	_ = grpcReply.(*pb.ClearCompleteResponse)
-	return endpoints.ClearCompleteResponse{}, nil
+// decodeGRPCCompleteAllResponse is a transport/grpc.DecodeResponseFunc that converts a
+// gRPC CompleteAll reply to a user-domain CompleteAll response. Primarily useful in a client.
+func decodeGRPCCompleteAllResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
+	_ = grpcReply.(*pb.CompleteAllResponse)
+	return endpoints.CompleteAllResponse{}, nil
+}
+
+// encodeGRPCClearRequest is a transport/grpc.EncodeRequestFunc that converts a
+// user-domain Clear request to a gRPC Clear request. Primarily useful in a client.
+func encodeGRPCClearRequest(_ context.Context, request interface{}) (interface{}, error) {
+	_ = request.(endpoints.ClearRequest)
+	return &pb.ClearRequest{}, nil
+}
+
+// decodeGRPCClearResponse is a transport/grpc.DecodeResponseFunc that converts a
+// gRPC Clear reply to a user-domain Clear response. Primarily useful in a client.
+func decodeGRPCClearResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
+	_ = grpcReply.(*pb.ClearResponse)
+	return endpoints.ClearResponse{}, nil
 }
 
 func grpcEncodeError(err errors.Error) error {
@@ -404,11 +528,7 @@ func grpcEncodeError(err errors.Error) error {
 	}
 
 	switch {
-	case errors.Contains(err, service.ErrInvalidQueryParams),
-		errors.Contains(err, service.ErrMalformedEntity):
-		return status.Error(codes.InvalidArgument, err.Error())
-	case errors.Contains(err, service.ErrNotFound):
-		return status.Error(codes.NotFound, err.Error())
+	// TODO write your own custom error check here
 	case errors.Contains(err, kitjwt.ErrTokenContextMissing):
 		return status.Error(codes.Unauthenticated, err.Error())
 	default:
