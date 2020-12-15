@@ -74,7 +74,7 @@ func (to *stubTodoService) Post(ctx context.Context, todo model.Todo) (res model
 	todo.CreatedAt = time.Now()
 	todo.UpdatedAt = time.Now()
 
-	if err := to.repo.Save(ctx, todo); err != nil {
+	if err := to.repo.Create(ctx, todo); err != nil {
 		return res, err
 	}
 	return todo, nil

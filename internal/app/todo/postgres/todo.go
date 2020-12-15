@@ -32,11 +32,11 @@ func New(db *gorm.DB, logger log.Logger) model.TodoRepository {
 	}
 }
 
-func (repo *todoRepository) Save(ctx context.Context, todo model.Todo) error {
+func (repo *todoRepository) Create(ctx context.Context, todo model.Todo) error {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 
-	if err := repo.db.WithContext(ctx).Save(ModelToDB(todo)).Error; err != nil {
+	if err := repo.db.WithContext(ctx).Create(ModelToDB(todo)).Error; err != nil {
 		return err
 	}
 	return nil
