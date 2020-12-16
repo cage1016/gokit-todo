@@ -2,7 +2,6 @@ package transports_test
 
 import (
 	"context"
-	"github.com/stretchr/testify/assert"
 	"net"
 	"os"
 	"testing"
@@ -12,6 +11,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/opentracing/opentracing-go"
 	"github.com/openzipkin/zipkin-go"
+	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 
 	"github.com/cage1016/todo/internal/app/todo/endpoints"
@@ -25,7 +25,7 @@ const (
 	hostPort string = "localhost:8002"
 )
 
-func TestGrpcServer_Post(t *testing.T) {
+func TestGrpcServer_Add(t *testing.T) {
 	type fields struct {
 		svc *automocks.MockTodoService
 	}
