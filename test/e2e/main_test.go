@@ -21,8 +21,8 @@ import (
 
 const (
 	// databaseHost is the host name of the test database.
-	// databaseHost = "db"
-	databaseHost = "localhost"
+	databaseHost = "db"
+	// databaseHost = "localhost"
 
 	// databasePort is the port that the test database is listening on.
 	databasePort = "5432"
