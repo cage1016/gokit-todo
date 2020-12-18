@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the stack
-        run: docker-compose -f docker-compose.test.yaml up --abort-on-container-exit
+        run: docker-compose -f docker-compose.integration.yaml up --abort-on-container-exit
 
   e2e:
     runs-on: ubuntu-latest
