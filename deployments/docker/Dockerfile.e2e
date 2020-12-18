@@ -1,0 +1,14 @@
+FROM golang:1.14-alpine
+
+# Install git
+RUN set -ex; \
+    apk update; \
+    apk add --no-cache git build-base
+
+# Set working directory
+WORKDIR /go/src/github.com/cage1016/todo/
+
+COPY . .
+
+# Run tests
+CMD go test -v -race -tags=e2e -coverprofile integration_cover.out ./...

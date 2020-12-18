@@ -1,0 +1,28 @@
+version: '3.1'
+
+networks:
+  e2e:
+    driver: bridge
+
+services:
+  todo_test:
+    build:
+      context: .
+      dockerfile: ./deployments/docker/Dockerfile.e2e
+    depends_on:
+      - db
+    networks:
+      - e2e
+
+  db:
+    image: postgres:latest
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: todo
+    ports:
+      - 5432:5432
+    networks:
+      - e2e

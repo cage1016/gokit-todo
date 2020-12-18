@@ -1,6 +1,6 @@
-// +build integration
+// +build e2e
 
-package todo
+package e2e
 
 import (
 	"net/http"
@@ -21,8 +21,8 @@ import (
 
 const (
 	// databaseHost is the host name of the test database.
-	databaseHost = "db"
-	// databaseHost = "localhost"
+	// databaseHost = "db"
+	databaseHost = "localhost"
 
 	// databasePort is the port that the test database is listening on.
 	databasePort = "5432"
@@ -45,9 +45,9 @@ type Application struct {
 }
 
 func Truncate(dbc *gorm.DB) error {
-	stmt := "TRUNCATE TABLE todo;"
+	stmt := "TRUNCATE TABLE todos"
 
-	if err := dbc.Raw(stmt).Error; err != nil {
+	if err := dbc.Exec(stmt).Error; err != nil {
 		return errors.Wrap(errors.New("truncate test database tables"), err)
 	}
 

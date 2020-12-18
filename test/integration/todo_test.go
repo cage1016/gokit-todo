@@ -1,6 +1,6 @@
 // +build integration
 
-package todo
+package integration
 
 import (
 	"fmt"
@@ -13,11 +13,12 @@ import (
 )
 
 func Test_Add_Todo(t *testing.T) {
-	defer func() {
+	t.Cleanup(func() {
+		t.Log("bbb")
 		if err := Truncate(a.DB); err != nil {
 			t.Errorf("error truncating test database tables: %v", err)
 		}
-	}()
+	})
 
 	body := strings.NewReader(`{"text":"aa"}`)
 	req, err := http.NewRequest(http.MethodPost, "/items", body)
@@ -28,5 +29,5 @@ func Test_Add_Todo(t *testing.T) {
 	w := httptest.NewRecorder()
 	a.handler.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusOK, w.Code, fmt.Sprintf("status: excpet 200, got %d", w.Code))
+	assert.Equal(t, http.StatusCreated, w.Code, fmt.Sprintf("status: excpet 200, got %d", w.Code))
 }

@@ -11,11 +11,11 @@ DELETE /items/cmD6HQYo-2iDtQfbcvCWm
 Host: localhost:8180
 
 ### Update: /items/:id
-PUT /items/jzYddopd58e5x-eDBaBWb
+PUT /items/9cxX9AqAWOd3MNeuM5h2H
 Host: localhost:8180
 
 {
-    "id": "jzYddopd58e5x-eDBaBWb",
+    "id": "9cxX9AqAWOd3MNeuM5h2H",
     "text": "111"
 }
 

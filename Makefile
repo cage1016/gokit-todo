@@ -37,13 +37,25 @@ test: ## test: run unit test
 integration: ## integration: run integration test
 	go test -v -race -tags=integration -coverprofile integration_cover.out ./...
 
-.PHONY: test-db-up
-test-db-up: ## docker-compose test up
-	docker-compose -f docker-compose.test.yaml up --build
+.PHONY: e2e
+e2e: ## e2e: run e2e test
+	go test -v -race -tags=e2e -coverprofile integration_cover.out ./...
 
-.PHONY: test-db-down
-test-db-down: ## docker-compose test down
-	docker-compose -f docker-compose.test.yaml down --volumes
+.PHONY: integration-test-db-up
+integration-test-db-up: ## docker-compose integration up
+	docker-compose -f docker-compose.integration.yaml up --build
+
+.PHONY: integration-test-db-down
+integration-test-db-down: ## docker-compose integration down
+	docker-compose -f docker-compose.integration.yaml down --volumes
+
+.PHONY: e2e-test-db-up
+e2e-test-db-up: ## docker-compose e2e up
+	docker-compose -f docker-compose.e2e.yaml up --build
+
+.PHONY: e2e-test-db-down
+e2e-test-db-down: ## docker-compose e2e down
+	docker-compose -f docker-compose.e2e.yaml down --volumes
 
 .PHONY: help
 help: ## this help

@@ -1,3 +1,5 @@
+// +build !integration
+
 package transports_test
 
 import (
@@ -60,7 +62,7 @@ func TestAddHandler(t *testing.T) {
 			},
 			checkFunc: func(res *http.Response, err error, body []byte) {
 				assert.Nil(t, err, fmt.Sprintf("unexpected error %s", err))
-				assert.Equal(t, http.StatusOK, res.StatusCode, fmt.Sprintf("status should be 204: got %d", res.StatusCode))
+				assert.Equal(t, http.StatusCreated, res.StatusCode, fmt.Sprintf("status should be 204: got %d", res.StatusCode))
 			},
 		},
 	}

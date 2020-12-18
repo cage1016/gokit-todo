@@ -47,7 +47,7 @@ type AddResponse struct {
 }
 
 func (r AddResponse) StatusCode() int {
-	return http.StatusOK // TBA
+	return http.StatusCreated // TBA
 }
 
 func (r AddResponse) Headers() http.Header {
