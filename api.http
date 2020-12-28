@@ -1,36 +1,49 @@
-### Add: /items
-POST /items
-Host: localhost:8180
+@hostname = http://localhost:8180
+
+
+###
+# @name add
+POST {{hostname}}/items HTTP/1.1
+Content-Type: application/json
 
 {
-    "text": "000"
+    "text": "ee"
 }
 
-### Delete: /items/:id
-DELETE /items/cmD6HQYo-2iDtQfbcvCWm
-Host: localhost:8180
 
-### Update: /items/:id
-PUT /items/9cxX9AqAWOd3MNeuM5h2H
-Host: localhost:8180
+###
+# @name list
+# filter=all,active,complete
+@filter = all
+GET {{hostname}}/items/?filter={{filter}} HTTP/1.1
+
+
+### 
+# @name delete
+DELETE {{hostname}}/items/{{list.response.body.data[0].id}} HTTP/1.1
+
+
+###
+# @name edit
+PUT {{hostname}}/items/{{list.response.body.data[0].id}} HTTP/1.1
+Content-Type: application/json
 
 {
-    "id": "9cxX9AqAWOd3MNeuM5h2H",
+    "id": "{{list.response.body.data[0].id}}",
     "text": "111"
 }
 
-### List: /items
-GET /items?filter=all
-Host: localhost:8180
 
-### Complete: /items/completes/:id
-POST /items/completes/LLUFTe1PDxMrFziXLZ1ST
-Host: localhost:8180
+###
+# @name complete
+POSt {{hostname}}/items/completes/{{list.response.body.data[0].id}} HTTP/1.1
 
-### CompleteAll: /items/completes
-POST /items/completes
-Host: localhost:8180
 
-### Clear: /items/clear
-POST /items/clear
-Host: localhost:8180
+###
+# @name completeAll
+POST {{hostname}}/items/completes HTTP/1.1
+
+
+###
+# @name clear
+POST {{hostname}}/items/clear
