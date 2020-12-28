@@ -19,11 +19,11 @@ type todoRepository struct {
 	db  *gorm.DB
 }
 
-func (repo *todoRepository) Add(ctx context.Context, todo model.Todo) error {
+func (repo *todoRepository) Add(ctx context.Context, todo *model.Todo) error {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 
-	if err := repo.db.WithContext(ctx).Create(ModelToDB(todo)).Error; err != nil {
+	if err := repo.db.WithContext(ctx).Create(todo).Error; err != nil {
 		return err
 	}
 	return nil
@@ -33,17 +33,17 @@ func (repo *todoRepository) Delete(ctx context.Context, todoID string) error {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 
-	if err := repo.db.WithContext(ctx).Delete(&Todo{ID: todoID}).Error; err != nil {
+	if err := repo.db.WithContext(ctx).Delete(&model.Todo{ID: todoID}).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (repo *todoRepository) Update(ctx context.Context, todo model.Todo) error {
+func (repo *todoRepository) Update(ctx context.Context, todo *model.Todo) error {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 
-	result := repo.db.WithContext(ctx).Model(&Todo{ID: todo.ID}).UpdateColumn("text", todo.Text)
+	result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todo.ID}).UpdateColumn("text", todo.Text)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -58,7 +58,7 @@ func (repo *todoRepository) CompleteAll(ctx context.Context) error {
 	defer repo.mu.Unlock()
 
 	var nonCompleteCount int64
-	if err := repo.db.WithContext(ctx).Model(&Todo{}).Where("complete = ?", false).Count(&nonCompleteCount).Error; err != nil {
+	if err := repo.db.WithContext(ctx).Model(&model.Todo{}).Where("complete = ?", false).Count(&nonCompleteCount).Error; err != nil {
 		return err
 	}
 
@@ -66,7 +66,7 @@ func (repo *todoRepository) CompleteAll(ctx context.Context) error {
 		if err := repo.db.WithContext(ctx).Exec("UPDATE todos SET complete = true").Error; err != nil {
 			return err
 		}
-	}else{
+	} else {
 		if err := repo.db.WithContext(ctx).Exec("UPDATE todos SET complete = false").Error; err != nil {
 			return err
 		}
@@ -78,7 +78,7 @@ func (repo *todoRepository) Complete(ctx context.Context, todoID string) error {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 
-	result := repo.db.WithContext(ctx).Model(&Todo{ID: todoID}).UpdateColumn("complete", gorm.Expr("NOT complete"))
+	result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todoID}).UpdateColumn("complete", gorm.Expr("NOT complete"))
 	if result.Error != nil {
 		return result.Error
 	}
@@ -88,7 +88,7 @@ func (repo *todoRepository) Complete(ctx context.Context, todoID string) error {
 	return nil
 }
 
-func (repo *todoRepository) List(ctx context.Context, filter string) ([]model.Todo, error) {
+func (repo *todoRepository) List(ctx context.Context, filter string) (res []*model.Todo, err error) {
 	repo.mu.RLock()
 	defer repo.mu.RUnlock()
 
@@ -106,20 +106,12 @@ func (repo *todoRepository) List(ctx context.Context, filter string) ([]model.To
 
 	}
 
-	dTodos := []Todo{}
-	if err := db.Order("created_at").Find(&dTodos).Error; err != nil {
-		return []model.Todo{}, nil
-	}
-
-	todos := []model.Todo{}
-	for _, t := range dTodos {
-		todos = append(todos, DBtoModel(t))
-	}
-	return todos, nil
+	err = db.Order("created_at").Find(&res).Error
+	return
 }
 
 func (repo *todoRepository) Clear(ctx context.Context) error {
-	if err := repo.db.WithContext(ctx).Where("complete", true).Delete(&Todo{}).Error; err != nil {
+	if err := repo.db.WithContext(ctx).Where("complete", true).Delete(&model.Todo{}).Error; err != nil {
 		return err
 	}
 	return nil

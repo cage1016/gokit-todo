@@ -42,7 +42,7 @@ var (
 
 // AddResponse collects the response values for the Add method.
 type AddResponse struct {
-	Res model.Todo `json:"res"`
+	Res *model.Todo `json:"res"`
 	Err error      `json:"-"`
 }
 
@@ -77,7 +77,7 @@ func (r DeleteResponse) Response() interface{} {
 
 // UpdateResponse collects the response values for the Update method.
 type UpdateResponse struct {
-	Res model.Todo `json:"res"`
+	Res *model.Todo `json:"res"`
 	Err error      `json:"-"`
 }
 
@@ -95,7 +95,7 @@ func (r UpdateResponse) Response() interface{} {
 
 // ListResponse collects the response values for the List method.
 type ListResponse struct {
-	Res []model.Todo `json:"res"`
+	Res []*model.Todo `json:"res"`
 	Err error        `json:"-"`
 }
 

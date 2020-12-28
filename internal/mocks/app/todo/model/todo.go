@@ -35,7 +35,7 @@ func (m *MockTodoRepository) EXPECT() *MockTodoRepositoryMockRecorder {
 }
 
 // Add mocks base method
-func (m *MockTodoRepository) Add(arg0 context.Context, arg1 model.Todo) error {
+func (m *MockTodoRepository) Add(arg0 context.Context, arg1 *model.Todo) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Add", arg0, arg1)
 	ret0, _ := ret[0].(error)
@@ -105,10 +105,10 @@ func (mr *MockTodoRepositoryMockRecorder) Delete(arg0, arg1 interface{}) *gomock
 }
 
 // List mocks base method
-func (m *MockTodoRepository) List(arg0 context.Context, arg1 string) ([]model.Todo, error) {
+func (m *MockTodoRepository) List(arg0 context.Context, arg1 string) ([]*model.Todo, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
-	ret0, _ := ret[0].([]model.Todo)
+	ret0, _ := ret[0].([]*model.Todo)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -120,7 +120,7 @@ func (mr *MockTodoRepositoryMockRecorder) List(arg0, arg1 interface{}) *gomock.C
 }
 
 // Update mocks base method
-func (m *MockTodoRepository) Update(arg0 context.Context, arg1 model.Todo) error {
+func (m *MockTodoRepository) Update(arg0 context.Context, arg1 *model.Todo) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1)
 	ret0, _ := ret[0].(error)

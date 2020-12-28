@@ -116,7 +116,7 @@ func MakeAddEndpoint(svc service.TodoService) (ep endpoint.Endpoint) {
 
 // Add implements the service interface, so Endpoints may be used as a service.
 // This is primarily useful in the context of a client library.
-func (e Endpoints) Add(ctx context.Context, todo model.Todo) (res model.Todo, err error) {
+func (e Endpoints) Add(ctx context.Context, todo *model.Todo) (res *model.Todo, err error) {
 	resp, err := e.AddEndpoint(ctx, AddRequest{Todo: todo})
 	if err != nil {
 		return
@@ -164,7 +164,7 @@ func MakeUpdateEndpoint(svc service.TodoService) (ep endpoint.Endpoint) {
 
 // Update implements the service interface, so Endpoints may be used as a service.
 // This is primarily useful in the context of a client library.
-func (e Endpoints) Update(ctx context.Context, id string, todo model.Todo) (res model.Todo, err error) {
+func (e Endpoints) Update(ctx context.Context, id string, todo *model.Todo) (res *model.Todo, err error) {
 	resp, err := e.UpdateEndpoint(ctx, UpdateRequest{Id: id, Todo: todo})
 	if err != nil {
 		return
@@ -188,7 +188,7 @@ func MakeListEndpoint(svc service.TodoService) (ep endpoint.Endpoint) {
 
 // List implements the service interface, so Endpoints may be used as a service.
 // This is primarily useful in the context of a client library.
-func (e Endpoints) List(ctx context.Context, filter string) (res []model.Todo, err error) {
+func (e Endpoints) List(ctx context.Context, filter string) (res []*model.Todo, err error) {
 	resp, err := e.ListEndpoint(ctx, ListRequest{Filter: filter})
 	if err != nil {
 		return

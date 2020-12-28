@@ -34,13 +34,13 @@ type Middleware func(TodoService) TodoService
 //go:generate mockgen -destination ../../../../internal/mocks/app/todo/service/todoservice.go -package=automocks . TodoService
 type TodoService interface {
 	// [method=post,expose=true,router=items]
-	Add(ctx context.Context, todo model.Todo) (res model.Todo, err error)
+	Add(ctx context.Context, todo *model.Todo) (res *model.Todo, err error)
 	// [method=delete,expose=true,router=items/:id]
 	Delete(ctx context.Context, id string) (err error)
 	// [method=put,expose=true,router=items/:id]
-	Update(ctx context.Context, id string, todo model.Todo) (res model.Todo, err error)
+	Update(ctx context.Context, id string, todo *model.Todo) (res *model.Todo, err error)
 	// [method=get,expose=true,router=items]
-	List(ctx context.Context, filter string) (res []model.Todo, err error)
+	List(ctx context.Context, filter string) (res []*model.Todo, err error)
 	// [method=post,expose=true,router=items/completes/:id]
 	Complete(ctx context.Context, id string) (err error)
 	// [method=post,expose=true,router=items/completes]
@@ -67,7 +67,7 @@ func New(repo model.TodoRepository, logger log.Logger) (s TodoService) {
 }
 
 // Implement the business logic of Add
-func (to *stubTodoService) Add(ctx context.Context, todo model.Todo) (res model.Todo, err error) {
+func (to *stubTodoService) Add(ctx context.Context, todo *model.Todo) (res *model.Todo, err error) {
 	id, _ := gonanoid.ID(21)
 	todo.ID = id
 	todo.CreatedAt = time.Now()
@@ -85,7 +85,7 @@ func (to *stubTodoService) Delete(ctx context.Context, id string) (err error) {
 }
 
 // Implement the business logic of Update
-func (to *stubTodoService) Update(ctx context.Context, id string, todo model.Todo) (res model.Todo, err error) {
+func (to *stubTodoService) Update(ctx context.Context, id string, todo *model.Todo) (res* model.Todo, err error) {
 	todo.UpdatedAt = time.Now()
 	if err := to.repo.Update(ctx, todo); err != nil {
 		return todo, err
@@ -94,7 +94,7 @@ func (to *stubTodoService) Update(ctx context.Context, id string, todo model.Tod
 }
 
 // Implement the business logic of List
-func (to *stubTodoService) List(ctx context.Context, filter string) (res []model.Todo, err error) {
+func (to *stubTodoService) List(ctx context.Context, filter string) (res []*model.Todo, err error) {
 	return to.repo.List(ctx, filter)
 }
 

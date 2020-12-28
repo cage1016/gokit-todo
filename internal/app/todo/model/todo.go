@@ -50,10 +50,10 @@ func (t *Todo) UnmarshalJSON(data []byte) error {
 
 //go:generate mockgen -destination ../../../../internal/mocks/app/todo/model/todo.go -package=automocks . TodoRepository
 type TodoRepository interface {
-	Add(context.Context, Todo) error
+	Add(context.Context, *Todo) error
 	Delete(context.Context, string) error
-	Update(context.Context, Todo) error
-	List(context.Context, string) ([]Todo, error)
+	Update(context.Context, *Todo) error
+	List(context.Context, string) (res []*Todo, err error)
 	Complete(context.Context, string) error
 	CompleteAll(context.Context) error
 	Clear(context.Context) error

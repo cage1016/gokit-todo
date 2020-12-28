@@ -35,10 +35,10 @@ func (m *MockTodoService) EXPECT() *MockTodoServiceMockRecorder {
 }
 
 // Add mocks base method
-func (m *MockTodoService) Add(arg0 context.Context, arg1 model.Todo) (model.Todo, error) {
+func (m *MockTodoService) Add(arg0 context.Context, arg1 *model.Todo) (*model.Todo, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Add", arg0, arg1)
-	ret0, _ := ret[0].(model.Todo)
+	ret0, _ := ret[0].(*model.Todo)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -106,10 +106,10 @@ func (mr *MockTodoServiceMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Ca
 }
 
 // List mocks base method
-func (m *MockTodoService) List(arg0 context.Context, arg1 string) ([]model.Todo, error) {
+func (m *MockTodoService) List(arg0 context.Context, arg1 string) ([]*model.Todo, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
-	ret0, _ := ret[0].([]model.Todo)
+	ret0, _ := ret[0].([]*model.Todo)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -121,10 +121,10 @@ func (mr *MockTodoServiceMockRecorder) List(arg0, arg1 interface{}) *gomock.Call
 }
 
 // Update mocks base method
-func (m *MockTodoService) Update(arg0 context.Context, arg1 string, arg2 model.Todo) (model.Todo, error) {
+func (m *MockTodoService) Update(arg0 context.Context, arg1 string, arg2 *model.Todo) (*model.Todo, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1, arg2)
-	ret0, _ := ret[0].(model.Todo)
+	ret0, _ := ret[0].(*model.Todo)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

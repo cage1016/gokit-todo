@@ -2,8 +2,6 @@ package transports
 
 import (
 	"context"
-	"time"
-
 	kitjwt "github.com/go-kit/kit/auth/jwt"
 	"github.com/go-kit/kit/endpoint"
 	"github.com/go-kit/kit/log"
@@ -17,10 +15,10 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/cage1016/todo/internal/app/todo/endpoints"
+	"github.com/cage1016/todo/internal/app/todo/model"
 	"github.com/cage1016/todo/internal/app/todo/service"
 	"github.com/cage1016/todo/internal/pkg/errors"
 	pb "github.com/cage1016/todo/pb/todo"
-	"github.com/cage1016/todo/internal/app/todo/model"
 )
 
 type grpcServer struct {
@@ -169,14 +167,14 @@ func MakeGRPCServer(endpoints endpoints.Endpoints, otTracer stdopentracing.Trace
 // gRPC request to a user-domain request. Primarily useful in a server.
 func decodeGRPCAddRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
 	req := grpcReq.(*pb.AddRequest)
-	return endpoints.AddRequest{Todo: PBtoModelTodo(req.Todo)}, nil
+	return endpoints.AddRequest{Todo: PBtoModel(req.Todo)}, nil
 }
 
 // encodeGRPCAddResponse is a transport/grpc.EncodeResponseFunc that converts a
 // user-domain response to a gRPC reply. Primarily useful in a server.
 func encodeGRPCAddResponse(_ context.Context, grpcReply interface{}) (res interface{}, err error) {
 	reply := grpcReply.(endpoints.AddResponse)
-	return &pb.AddResponse{Res: ModelToPBTodo(reply.Res)}, grpcEncodeError(errors.Cast(reply.Err))
+	return &pb.AddResponse{Res: ModelToPB(reply.Res)}, grpcEncodeError(errors.Cast(reply.Err))
 }
 
 // decodeGRPCDeleteRequest is a transport/grpc.DecodeRequestFunc that converts a
@@ -197,14 +195,14 @@ func encodeGRPCDeleteResponse(_ context.Context, grpcReply interface{}) (res int
 // gRPC request to a user-domain request. Primarily useful in a server.
 func decodeGRPCUpdateRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
 	req := grpcReq.(*pb.UpdateRequest)
-	return endpoints.UpdateRequest{Id: req.Id, Todo: PBtoModelTodo(req.Todo)}, nil
+	return endpoints.UpdateRequest{Id: req.Id, Todo: PBtoModel(req.Todo)}, nil
 }
 
 // encodeGRPCUpdateResponse is a transport/grpc.EncodeResponseFunc that converts a
 // user-domain response to a gRPC reply. Primarily useful in a server.
 func encodeGRPCUpdateResponse(_ context.Context, grpcReply interface{}) (res interface{}, err error) {
 	reply := grpcReply.(endpoints.UpdateResponse)
-	return &pb.UpdateResponse{Res: ModelToPBTodo(reply.Res)}, grpcEncodeError(errors.Cast(reply.Err))
+	return &pb.UpdateResponse{Res: ModelToPB(reply.Res)}, grpcEncodeError(errors.Cast(reply.Err))
 }
 
 // decodeGRPCListRequest is a transport/grpc.DecodeRequestFunc that converts a
@@ -224,7 +222,7 @@ func encodeGRPCListResponse(_ context.Context, grpcReply interface{}) (res inter
 
 	todos := []*pb.ModelTodo{}
 	for _, todo := range reply.Res {
-		todos = append(todos, ModelToPBTodo(todo))
+		todos = append(todos, ModelToPB(todo))
 	}
 
 	return &pb.ListResponse{Res: todos}, grpcEncodeError(errors.Cast(reply.Err))
@@ -417,14 +415,14 @@ func NewGRPCClient(conn *grpc.ClientConn, otTracer stdopentracing.Tracer, zipkin
 // user-domain Add request to a gRPC Add request. Primarily useful in a client.
 func encodeGRPCAddRequest(_ context.Context, request interface{}) (interface{}, error) {
 	req := request.(endpoints.AddRequest)
-	return &pb.AddRequest{Todo: ModelToPBTodo(req.Todo)}, nil
+	return &pb.AddRequest{Todo: ModelToPB(req.Todo)}, nil
 }
 
 // decodeGRPCAddResponse is a transport/grpc.DecodeResponseFunc that converts a
 // gRPC Add reply to a user-domain Add response. Primarily useful in a client.
 func decodeGRPCAddResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
 	reply := grpcReply.(*pb.AddResponse)
-	return endpoints.AddResponse{Res: PBtoModelTodo(reply.Res)}, nil
+	return endpoints.AddResponse{Res: PBtoModel(reply.Res)}, nil
 }
 
 // encodeGRPCDeleteRequest is a transport/grpc.EncodeRequestFunc that converts a
@@ -445,14 +443,14 @@ func decodeGRPCDeleteResponse(_ context.Context, grpcReply interface{}) (interfa
 // user-domain Update request to a gRPC Update request. Primarily useful in a client.
 func encodeGRPCUpdateRequest(_ context.Context, request interface{}) (interface{}, error) {
 	req := request.(endpoints.UpdateRequest)
-	return &pb.UpdateRequest{Id: req.Id, Todo: ModelToPBTodo(req.Todo)}, nil
+	return &pb.UpdateRequest{Id: req.Id, Todo: ModelToPB(req.Todo)}, nil
 }
 
 // decodeGRPCUpdateResponse is a transport/grpc.DecodeResponseFunc that converts a
 // gRPC Update reply to a user-domain Update response. Primarily useful in a client.
 func decodeGRPCUpdateResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
 	reply := grpcReply.(*pb.UpdateResponse)
-	return endpoints.UpdateResponse{Res: PBtoModelTodo(reply.Res)}, nil
+	return endpoints.UpdateResponse{Res: PBtoModel(reply.Res)}, nil
 }
 
 // encodeGRPCListRequest is a transport/grpc.EncodeRequestFunc that converts a
@@ -467,9 +465,9 @@ func encodeGRPCListRequest(_ context.Context, request interface{}) (interface{},
 func decodeGRPCListResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
 	reply := grpcReply.(*pb.ListResponse)
 
-	todos := []model.Todo{}
+	todos := []*model.Todo{}
 	for _, todo := range reply.Res {
-		todos = append(todos, PBtoModelTodo(todo))
+		todos = append(todos, PBtoModel(todo))
 	}
 
 	return endpoints.ListResponse{Res: todos}, nil
@@ -533,37 +531,5 @@ func grpcEncodeError(err errors.Error) error {
 		return status.Error(codes.Unauthenticated, err.Error())
 	default:
 		return status.Error(codes.Internal, "internal server error")
-	}
-}
-
-func ModelToPBTodo(todo model.Todo) *pb.ModelTodo {
-	return &pb.ModelTodo{
-		Id:        todo.ID,
-		CreatedAt: todo.CreatedAt.Format(time.RFC3339),
-		UpdatedAt: todo.UpdatedAt.Format(time.RFC3339),
-		Text:      todo.Text,
-		Complete:  todo.Complete,
-	}
-}
-
-func PBtoModelTodo(todo *pb.ModelTodo) model.Todo {
-	return model.Todo{
-		ID: todo.Id,
-		CreatedAt: func() time.Time {
-			t, err := time.Parse(time.RFC3339, todo.CreatedAt)
-			if err != nil {
-				return time.Time{}
-			}
-			return t
-		}(),
-		UpdatedAt: func() time.Time {
-			t, err := time.Parse(time.RFC3339, todo.UpdatedAt)
-			if err != nil {
-				return time.Time{}
-			}
-			return t
-		}(),
-		Text:     todo.Text,
-		Complete: todo.Complete,
 	}
 }

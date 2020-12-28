@@ -21,7 +21,7 @@ func LoggingMiddleware(logger log.Logger) Middleware {
 	}
 }
 
-func (lm loggingMiddleware) Add(ctx context.Context, todo model.Todo) (res model.Todo, err error) {
+func (lm loggingMiddleware) Add(ctx context.Context, todo *model.Todo) (res *model.Todo, err error) {
 	defer func() {
 		lm.logger.Log("method", "Add", "todo", todo, "err", err)
 	}()
@@ -37,7 +37,7 @@ func (lm loggingMiddleware) Delete(ctx context.Context, id string) (err error) {
 	return lm.next.Delete(ctx, id)
 }
 
-func (lm loggingMiddleware) Update(ctx context.Context, id string, todo model.Todo) (res model.Todo, err error) {
+func (lm loggingMiddleware) Update(ctx context.Context, id string, todo *model.Todo) (res *model.Todo, err error) {
 	defer func() {
 		lm.logger.Log("method", "Update", "id", id, "todo", todo, "err", err)
 	}()
@@ -45,7 +45,7 @@ func (lm loggingMiddleware) Update(ctx context.Context, id string, todo model.To
 	return lm.next.Update(ctx, id, todo)
 }
 
-func (lm loggingMiddleware) List(ctx context.Context, filter string) (res []model.Todo, err error) {
+func (lm loggingMiddleware) List(ctx context.Context, filter string) (res []*model.Todo, err error) {
 	defer func() {
 		lm.logger.Log("method", "List", "filter", filter, "err", err)
 	}()

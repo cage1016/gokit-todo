@@ -5,6 +5,8 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"github.com/cage1016/todo/internal/app/todo/model"
 )
 
 // Config defines the options that are used when connecting to a PostgreSQL instance
@@ -31,7 +33,7 @@ func Connect(cfg Config) (*gorm.DB, error) {
 		return nil, err
 	}
 
-	db.AutoMigrate(&Todo{})
+	db.AutoMigrate(&model.Todo{})
 
 	return db.Debug(), nil
 }
