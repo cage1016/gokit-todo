@@ -1,0 +1,112 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: todo-pvc
+spec:
+  accessModes:
+    - "ReadWriteMany"
+  resources:
+    requests:
+      storage: "100Mi"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todo-postgres-configuration
+  labels:
+    app: todo-postgres
+data:
+  POSTGRES_DB: todo
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: password
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo
+  template:
+    metadata:
+      labels:
+        app: todo
+    spec:
+      volumes:
+        - name: todo-postgresdb-storage
+          persistentVolumeClaim:
+            claimName: todo-pvc
+      containers:
+        - image: postgres:9.6.3
+          name: my-database
+          envFrom:
+          - configMapRef:
+              name: todo-postgres-configuration
+          ports:
+          - containerPort: 5432
+          resources: {}
+          volumeMounts:
+          - mountPath: "/var/lib/postgresql/data:Z"
+            name: todo-postgresdb-storage
+        - name: todo
+          image: index.docker.io/cage1016/gokit-todo
+          env:
+            - name: QS_DB
+              value: "todo"
+            - name: QS_DB_HOST
+              value: "localhost"
+            - name: QS_DB_PASS
+              value: "password"
+            - name: QS_DB_PORT
+              value: "5432"
+            - name: QS_DB_SSL_CERT
+              value: ""
+            - name: QS_DB_SSL_KEY
+              value: ""
+            - name: QS_DB_SSL_MODE
+              value: ""
+            - name: QS_DB_SSL_ROOT_CERT
+              value: ""
+            - name: QS_DB_USER
+              value: "postgres"
+            - name: QS_GRPC_PORT
+              value: "10121"
+            - name: QS_HTTP_PORT
+              value: "10120"
+            - name: QS_LOG_LEVEL
+              value: "info"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: todo
+spec:
+  selector:
+    app: todo
+  ports:
+    - port: 80
+      name: http
+      targetPort: 10120
+    - port: 8000
+      name: grpc
+      targetPort: 10121
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: todo-external
+  labels:
+    app: todo
+spec:
+  type: LoadBalancer
+  selector:
+    app: todo
+  ports:
+    - port: 10120
+      name: http
+      targetPort: 10120
+    - port: 10121
+      name: grpc
+      targetPort: 10121

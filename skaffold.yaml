@@ -1,0 +1,17 @@
+apiVersion: skaffold/v2beta5
+kind: Config
+build:
+  artifacts:
+    - image: index.docker.io/cage1016/gokit-todo
+      buildpacks:
+        builder: "gcr.io/buildpacks/builder:v1"
+        env:
+          - GOOGLE_BUILDABLE=cmd/todo/main.go
+  tagPolicy:
+      sha256: {}
+  local:
+    push: true
+deploy:
+  kubectl:
+    manifests:
+    - ./deployments/k8s.yaml

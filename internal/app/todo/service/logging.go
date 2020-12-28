@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
@@ -24,7 +25,7 @@ func LoggingMiddleware(logger log.Logger) Middleware {
 
 func (lm loggingMiddleware) Add(ctx context.Context, todo *model.Todo) (res *model.Todo, err error) {
 	defer func() {
-		lm.logger.Log("method", "Add", "todo", todo, "err", err)
+		lm.logger.Log("method", "Add", "todo", fmt.Sprintf("%v", todo), "err", err)
 	}()
 
 	return lm.next.Add(ctx, todo)
@@ -40,7 +41,7 @@ func (lm loggingMiddleware) Delete(ctx context.Context, id string) (err error) {
 
 func (lm loggingMiddleware) Update(ctx context.Context, id string, todo *model.Todo) (res *model.Todo, err error) {
 	defer func() {
-		lm.logger.Log("method", "Update", "id", id, "todo", todo, "err", err)
+		lm.logger.Log("method", "Update", "id", id, "todo", fmt.Sprintf("%v", todo), "err", err)
 	}()
 
 	return lm.next.Update(ctx, id, todo)
