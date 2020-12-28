@@ -57,7 +57,7 @@ func (lm loggingMiddleware) List(ctx context.Context, filter string) (res []*mod
 
 func (lm loggingMiddleware) Complete(ctx context.Context, id string) (err error) {
 	defer func() {
-		lm.logger.Log("method", "Complete", "id", id, "err", err)
+		lm.logger.Log("method", "Completed", "id", id, "err", err)
 	}()
 
 	return lm.next.Complete(ctx, id)

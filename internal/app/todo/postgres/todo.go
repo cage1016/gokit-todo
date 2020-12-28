@@ -43,7 +43,8 @@ func (repo *todoRepository) Update(ctx context.Context, todo *model.Todo) error 
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 
-	result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todo.ID}).UpdateColumn("text", todo.Text)
+	// result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todo.ID}).UpdateColumn("text", todo.Text)
+	result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todo.ID}).UpdateColumns(&model.Todo{Text: todo.Text, Completed: todo.Completed})
 	if result.Error != nil {
 		return result.Error
 	}
@@ -58,16 +59,16 @@ func (repo *todoRepository) CompleteAll(ctx context.Context) error {
 	defer repo.mu.Unlock()
 
 	var nonCompleteCount int64
-	if err := repo.db.WithContext(ctx).Model(&model.Todo{}).Where("complete = ?", false).Count(&nonCompleteCount).Error; err != nil {
+	if err := repo.db.WithContext(ctx).Model(&model.Todo{}).Where("completed = ?", false).Count(&nonCompleteCount).Error; err != nil {
 		return err
 	}
 
 	if nonCompleteCount > 0 {
-		if err := repo.db.WithContext(ctx).Exec("UPDATE todos SET complete = true").Error; err != nil {
+		if err := repo.db.WithContext(ctx).Exec("UPDATE todos SET completed = true").Error; err != nil {
 			return err
 		}
 	} else {
-		if err := repo.db.WithContext(ctx).Exec("UPDATE todos SET complete = false").Error; err != nil {
+		if err := repo.db.WithContext(ctx).Exec("UPDATE todos SET completed = false").Error; err != nil {
 			return err
 		}
 	}
@@ -78,7 +79,7 @@ func (repo *todoRepository) Complete(ctx context.Context, todoID string) error {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 
-	result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todoID}).UpdateColumn("complete", gorm.Expr("NOT complete"))
+	result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todoID}).UpdateColumn("completed", gorm.Expr("NOT completed"))
 	if result.Error != nil {
 		return result.Error
 	}
@@ -95,10 +96,10 @@ func (repo *todoRepository) List(ctx context.Context, filter string) (res []*mod
 	db := repo.db.WithContext(ctx)
 	switch filter {
 	case service.ACTIVE:
-		db = db.Where("complete", false)
+		db = db.Where("completed", false)
 		break
 	case service.COMPLETE:
-		db = db.Where("complete", true)
+		db = db.Where("completed", true)
 		break
 	case service.ALL:
 		break
@@ -111,7 +112,7 @@ func (repo *todoRepository) List(ctx context.Context, filter string) (res []*mod
 }
 
 func (repo *todoRepository) Clear(ctx context.Context) error {
-	if err := repo.db.WithContext(ctx).Where("complete", true).Delete(&model.Todo{}).Error; err != nil {
+	if err := repo.db.WithContext(ctx).Where("completed", true).Delete(&model.Todo{}).Error; err != nil {
 		return err
 	}
 	return nil

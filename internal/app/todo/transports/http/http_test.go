@@ -50,7 +50,7 @@ func TestAddHandler(t *testing.T) {
 						CreatedAt: time.Now(),
 						UpdatedAt: time.Now(),
 						Text:      "aa",
-						Complete:  false,
+						Completed: false,
 					}, nil),
 				)
 			},

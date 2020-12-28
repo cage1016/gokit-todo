@@ -25,7 +25,7 @@ func TestTodoRepository_Add(t *testing.T) {
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 			Text:      "aa",
-			Complete:  false,
+			Completed: false,
 		}
 	)
 
@@ -46,8 +46,8 @@ func TestTodoRepository_Add(t *testing.T) {
 		{
 			name: "Add Todo",
 			prepare: func(f *fields) {
-				f.mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "todos" ("id","created_at","updated_at","text","complete") VALUES ($1,$2,$3,$4,$5)`)).
-					WithArgs(mTodo.ID, mTodo.CreatedAt, mTodo.UpdatedAt, mTodo.Text, mTodo.Complete).
+				f.mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "todos" ("id","created_at","updated_at","text","completed") VALUES ($1,$2,$3,$4,$5)`)).
+					WithArgs(mTodo.ID, mTodo.CreatedAt, mTodo.UpdatedAt, mTodo.Text, mTodo.Completed).
 					WillReturnResult(sqlmock.NewResult(1, 1)).
 					WillReturnError(nil)
 			},

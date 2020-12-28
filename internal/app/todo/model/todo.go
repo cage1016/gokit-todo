@@ -11,7 +11,7 @@ type Todo struct {
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 	Text      string    `json:"text"`
-	Complete  bool      `json:"complete"`
+	Completed bool      `json:"completed"`
 }
 
 func (p Todo) MarshalJSON() ([]byte, error) {

@@ -65,7 +65,7 @@ func (mr *MockTodoRepositoryMockRecorder) Clear(arg0 interface{}) *gomock.Call {
 // Complete mocks base method
 func (m *MockTodoRepository) Complete(arg0 context.Context, arg1 string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Complete", arg0, arg1)
+	ret := m.ctrl.Call(m, "Completed", arg0, arg1)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
@@ -73,7 +73,7 @@ func (m *MockTodoRepository) Complete(arg0 context.Context, arg1 string) error {
 // Complete indicates an expected call of Complete
 func (mr *MockTodoRepositoryMockRecorder) Complete(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Complete", reflect.TypeOf((*MockTodoRepository)(nil).Complete), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Completed", reflect.TypeOf((*MockTodoRepository)(nil).Complete), arg0, arg1)
 }
 
 // CompleteAll mocks base method

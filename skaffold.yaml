@@ -5,6 +5,10 @@ build:
     - image: index.docker.io/cage1016/gokit-todo
       buildpacks:
         builder: "gcr.io/buildpacks/builder:v1"
+        dependencies:
+          paths:
+            - cmd/todo/main.go
+            - internal
         env:
           - GOOGLE_BUILDABLE=cmd/todo/main.go
   tagPolicy:

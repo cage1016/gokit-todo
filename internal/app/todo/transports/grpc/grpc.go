@@ -145,7 +145,7 @@ func MakeGRPCServer(endpoints endpoints.Endpoints, otTracer stdopentracing.Trace
 			endpoints.CompleteEndpoint,
 			decodeGRPCCompleteRequest,
 			encodeGRPCCompleteResponse,
-			append(options, grpctransport.ServerBefore(opentracing.GRPCToContext(otTracer, "Complete", logger), kitjwt.GRPCToContext()))...,
+			append(options, grpctransport.ServerBefore(opentracing.GRPCToContext(otTracer, "Completed", logger), kitjwt.GRPCToContext()))...,
 		),
 
 		completeAll: grpctransport.NewServer(
@@ -353,20 +353,20 @@ func NewGRPCClient(conn *grpc.ClientConn, otTracer stdopentracing.Tracer, zipkin
 		listEndpoint = opentracing.TraceClient(otTracer, "List")(listEndpoint)
 	}
 
-	// The Complete endpoint is the same thing, with slightly different
+	// The Completed endpoint is the same thing, with slightly different
 	// middlewares to demonstrate how to specialize per-endpoint.
 	var completeEndpoint endpoint.Endpoint
 	{
 		completeEndpoint = grpctransport.NewClient(
 			conn,
 			"pb.Todo",
-			"Complete",
+			"Completed",
 			encodeGRPCCompleteRequest,
 			decodeGRPCCompleteResponse,
 			pb.CompleteResponse{},
 			append(options, grpctransport.ClientBefore(opentracing.ContextToGRPC(otTracer, logger), kitjwt.ContextToGRPC()))...,
 		).Endpoint()
-		completeEndpoint = opentracing.TraceClient(otTracer, "Complete")(completeEndpoint)
+		completeEndpoint = opentracing.TraceClient(otTracer, "Completed")(completeEndpoint)
 	}
 
 	// The CompleteAll endpoint is the same thing, with slightly different
@@ -475,14 +475,14 @@ func decodeGRPCListResponse(_ context.Context, grpcReply interface{}) (interface
 }
 
 // encodeGRPCCompleteRequest is a transport/grpc.EncodeRequestFunc that converts a
-// user-domain Complete request to a gRPC Complete request. Primarily useful in a client.
+// user-domain Completed request to a gRPC Completed request. Primarily useful in a client.
 func encodeGRPCCompleteRequest(_ context.Context, request interface{}) (interface{}, error) {
 	req := request.(endpoints.CompleteRequest)
 	return &pb.CompleteRequest{Id: req.Id}, nil
 }
 
 // decodeGRPCCompleteResponse is a transport/grpc.DecodeResponseFunc that converts a
-// gRPC Complete reply to a user-domain Complete response. Primarily useful in a client.
+// gRPC Completed reply to a user-domain Completed response. Primarily useful in a client.
 func decodeGRPCCompleteResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
 	_ = grpcReply.(*pb.CompleteResponse)
 	return endpoints.CompleteResponse{}, nil

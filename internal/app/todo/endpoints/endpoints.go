@@ -198,7 +198,7 @@ func (e Endpoints) List(ctx context.Context, filter string) (res []*model.Todo, 
 	return response.Res, nil
 }
 
-// MakeCompleteEndpoint returns an endpoint that invokes Complete on the service.
+// MakeCompleteEndpoint returns an endpoint that invokes Completed on the service.
 // Primarily useful in a server.
 func MakeCompleteEndpoint(svc service.TodoService) (ep endpoint.Endpoint) {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {

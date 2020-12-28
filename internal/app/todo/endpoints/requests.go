@@ -37,9 +37,6 @@ type UpdateRequest struct {
 }
 
 func (r UpdateRequest) validate() error {
-	if r.Id != r.Todo.ID {
-		return service.ErrMalformedEntity
-	}
 	return nil
 }
 
@@ -55,7 +52,7 @@ func (r ListRequest) validate() error {
 	return nil
 }
 
-// CompleteRequest collects the request parameters for the Complete method.
+// CompleteRequest collects the request parameters for the Completed method.
 type CompleteRequest struct {
 	Id string `json:"id"`
 }

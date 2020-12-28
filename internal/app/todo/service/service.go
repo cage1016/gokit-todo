@@ -87,6 +87,7 @@ func (to *stubTodoService) Delete(ctx context.Context, id string) (err error) {
 // Implement the business logic of Update
 func (to *stubTodoService) Update(ctx context.Context, id string, todo *model.Todo) (res *model.Todo, err error) {
 	todo.UpdatedAt = time.Now()
+	todo.ID = id
 	if err := to.repo.Update(ctx, todo); err != nil {
 		return todo, err
 	}

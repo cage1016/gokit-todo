@@ -111,7 +111,7 @@ func (r ListResponse) Response() interface{} {
 	return responses.DataRes{APIVersion: service.Version, Data: r.Res}
 }
 
-// CompleteResponse collects the response values for the Complete method.
+// CompleteResponse collects the response values for the Completed method.
 type CompleteResponse struct {
 	Err error `json:"-"`
 }

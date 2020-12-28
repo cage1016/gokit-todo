@@ -90,7 +90,7 @@ func ListHandler(m *bone.Mux, endpoints endpoints.Endpoints, options []httptrans
 }
 
 // ShowTodo godoc
-// @Summary Complete
+// @Summary Completed
 // @Description TODO
 // @Tags TODO
 // @Accept json
@@ -101,7 +101,7 @@ func CompleteHandler(m *bone.Mux, endpoints endpoints.Endpoints, options []httpt
 		endpoints.CompleteEndpoint,
 		decodeHTTPCompleteRequest,
 		responses.EncodeJSONResponse,
-		append(options, httptransport.ServerBefore(opentracing.HTTPToContext(otTracer, "Complete", logger), kitjwt.HTTPToContext()))...,
+		append(options, httptransport.ServerBefore(opentracing.HTTPToContext(otTracer, "Completed", logger), kitjwt.HTTPToContext()))...,
 	))
 }
 

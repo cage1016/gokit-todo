@@ -14,7 +14,7 @@ func ModelToPB(todo *model.Todo) *pb.ModelTodo {
 		CreatedAt: todo.CreatedAt.Format(time.RFC3339),
 		UpdatedAt: todo.UpdatedAt.Format(time.RFC3339),
 		Text:      todo.Text,
-		Complete:  todo.Complete,
+		Completed:  todo.Completed,
 	}
 }
 
@@ -35,7 +35,7 @@ func PBtoModel(todo *pb.ModelTodo) *model.Todo {
 			}
 			return t
 		}(),
-		Text:     todo.Text,
-		Complete: todo.Complete,
+		Text:      todo.Text,
+		Completed: todo.Completed,
 	}
 }
