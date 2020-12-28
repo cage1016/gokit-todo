@@ -2,6 +2,7 @@ package transports
 
 import (
 	"context"
+
 	kitjwt "github.com/go-kit/kit/auth/jwt"
 	"github.com/go-kit/kit/endpoint"
 	"github.com/go-kit/kit/log"

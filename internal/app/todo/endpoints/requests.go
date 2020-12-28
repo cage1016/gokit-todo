@@ -32,7 +32,7 @@ func (r DeleteRequest) validate() error {
 
 // UpdateRequest collects the request parameters for the Update method.
 type UpdateRequest struct {
-	Id   string     `json:"id"`
+	Id   string      `json:"id"`
 	Todo *model.Todo `json:"todo"`
 }
 

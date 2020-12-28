@@ -3,14 +3,15 @@ package endpoints
 import (
 	"context"
 
-	"github.com/cage1016/todo/internal/app/todo/model"
-	"github.com/cage1016/todo/internal/app/todo/service"
 	"github.com/go-kit/kit/endpoint"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/tracing/opentracing"
 	"github.com/go-kit/kit/tracing/zipkin"
 	stdopentracing "github.com/opentracing/opentracing-go"
 	stdzipkin "github.com/openzipkin/zipkin-go"
+
+	"github.com/cage1016/todo/internal/app/todo/model"
+	"github.com/cage1016/todo/internal/app/todo/service"
 )
 
 // Endpoints collects all of the endpoints that compose the todo service. It's

@@ -14,7 +14,6 @@ import (
 
 func Test_Add_Todo(t *testing.T) {
 	t.Cleanup(func() {
-		t.Log("bbb")
 		if err := Truncate(a.DB); err != nil {
 			t.Errorf("error truncating test database tables: %v", err)
 		}

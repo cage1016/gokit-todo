@@ -1,13 +1,13 @@
 package endpoints
 
 import (
-	"github.com/cage1016/todo/internal/app/todo/model"
 	"net/http"
-	
+
 	httptransport "github.com/go-kit/kit/transport/http"
-	
-	"github.com/cage1016/todo/internal/pkg/responses"
+
+	"github.com/cage1016/todo/internal/app/todo/model"
 	"github.com/cage1016/todo/internal/app/todo/service"
+	"github.com/cage1016/todo/internal/pkg/responses"
 )
 
 var (
@@ -43,7 +43,7 @@ var (
 // AddResponse collects the response values for the Add method.
 type AddResponse struct {
 	Res *model.Todo `json:"res"`
-	Err error      `json:"-"`
+	Err error       `json:"-"`
 }
 
 func (r AddResponse) StatusCode() int {
@@ -78,7 +78,7 @@ func (r DeleteResponse) Response() interface{} {
 // UpdateResponse collects the response values for the Update method.
 type UpdateResponse struct {
 	Res *model.Todo `json:"res"`
-	Err error      `json:"-"`
+	Err error       `json:"-"`
 }
 
 func (r UpdateResponse) StatusCode() int {
@@ -96,7 +96,7 @@ func (r UpdateResponse) Response() interface{} {
 // ListResponse collects the response values for the List method.
 type ListResponse struct {
 	Res []*model.Todo `json:"res"`
-	Err error        `json:"-"`
+	Err error         `json:"-"`
 }
 
 func (r ListResponse) StatusCode() int {
@@ -161,4 +161,3 @@ func (r ClearResponse) Headers() http.Header {
 func (r ClearResponse) Response() interface{} {
 	return responses.DataRes{APIVersion: service.Version}
 }
-

@@ -1,9 +1,11 @@
 package transports
 
 import (
-	"github.com/cage1016/todo/internal/app/todo/model"
-	pb "github.com/cage1016/todo/pb/todo"
 	"time"
+
+	pb "github.com/cage1016/todo/pb/todo"
+
+	"github.com/cage1016/todo/internal/app/todo/model"
 )
 
 func ModelToPB(todo *model.Todo) *pb.ModelTodo {
@@ -37,4 +39,3 @@ func PBtoModel(todo *pb.ModelTodo) *model.Todo {
 		Complete: todo.Complete,
 	}
 }
-

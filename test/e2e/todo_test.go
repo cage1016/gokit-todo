@@ -23,7 +23,6 @@ type response struct {
 
 func Test_Todo(t *testing.T) {
 	t.Cleanup(func() {
-		t.Log("aaaaa")
 		if err := Truncate(a.DB); err != nil {
 			t.Errorf("error truncating test database tables: %v", err)
 		}
