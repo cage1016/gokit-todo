@@ -23,7 +23,7 @@ func TestStubTodoService_Add(t *testing.T) {
 	}
 
 	type args struct {
-		todo model.Todo
+		todo *model.Todo
 	}
 
 	tests := []struct {
@@ -31,7 +31,7 @@ func TestStubTodoService_Add(t *testing.T) {
 		prepare   func(f *fields)
 		args      args
 		wantErr   bool
-		checkFunc func(res model.Todo, err error)
+		checkFunc func(res *model.Todo, err error)
 	}{
 		{
 			name: "Add todo",
@@ -40,11 +40,11 @@ func TestStubTodoService_Add(t *testing.T) {
 					f.repo.EXPECT().Add(context.Background(), gomock.Any()).Return(nil),
 				)
 			},
-			args: args{todo: model.Todo{
+			args: args{todo: &model.Todo{
 				Text: "aa",
 			}},
 			wantErr: false,
-			checkFunc: func(res model.Todo, err error) {
+			checkFunc: func(res *model.Todo, err error) {
 				assert.Nil(t, err, fmt.Sprintf("should return nil: expected nil got %v", err))
 				assert.Equal(t, "aa", res.Text, fmt.Sprintf("text: expected aa got %v", res.Text))
 			},

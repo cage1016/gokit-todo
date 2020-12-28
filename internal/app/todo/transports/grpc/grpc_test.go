@@ -33,7 +33,7 @@ func TestGrpcServer_Add(t *testing.T) {
 	}
 
 	type args struct {
-		todo model.Todo
+		todo *model.Todo
 	}
 
 	tests := []struct {
@@ -41,13 +41,13 @@ func TestGrpcServer_Add(t *testing.T) {
 		prepare   func(f *fields)
 		args      args
 		wantErr   bool
-		checkFunc func(res model.Todo, err error)
+		checkFunc func(res *model.Todo, err error)
 	}{
 		{
 			name: "grpc add todo",
 			prepare: func(f *fields) {
 				gomock.InOrder(
-					f.svc.EXPECT().Add(gomock.Any(), gomock.Any()).Return(model.Todo{
+					f.svc.EXPECT().Add(gomock.Any(), gomock.Any()).Return(&model.Todo{
 						ID:        "iKe0KxpurIn0E_6vzUDAr",
 						CreatedAt: time.Now(),
 						UpdatedAt: time.Now(),
@@ -56,10 +56,10 @@ func TestGrpcServer_Add(t *testing.T) {
 					}, nil),
 				)
 			},
-			args: args{todo: model.Todo{
+			args: args{todo: &model.Todo{
 				Text: "aa",
 			}},
-			checkFunc: func(res model.Todo, err error) {
+			checkFunc: func(res *model.Todo, err error) {
 				assert.Equal(t, "aa", res.Text)
 			},
 		},

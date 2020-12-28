@@ -20,7 +20,7 @@ import (
 
 func TestTodoRepository_Add(t *testing.T) {
 	var (
-		mTodo = model.Todo{
+		mTodo = &model.Todo{
 			ID:        "iKe0KxpurIn0E_6vzUDAr",
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
@@ -34,7 +34,7 @@ func TestTodoRepository_Add(t *testing.T) {
 	}
 
 	type args struct {
-		todo model.Todo
+		todo *model.Todo
 	}
 
 	tests := []struct {

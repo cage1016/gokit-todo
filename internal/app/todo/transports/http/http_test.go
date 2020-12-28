@@ -45,7 +45,7 @@ func TestAddHandler(t *testing.T) {
 			name: "add todo",
 			prepare: func(f *fields) {
 				gomock.InOrder(
-					f.svc.EXPECT().Add(gomock.Any(), gomock.Any()).Return(model.Todo{
+					f.svc.EXPECT().Add(gomock.Any(), gomock.Any()).Return(&model.Todo{
 						ID:        "iKe0KxpurIn0E_6vzUDAr",
 						CreatedAt: time.Now(),
 						UpdatedAt: time.Now(),
