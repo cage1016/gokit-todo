@@ -29,72 +29,56 @@ func Test_Todo(t *testing.T) {
 	})
 
 	// add todo
-	req, _ := http.NewRequest(http.MethodPost, "/items", strings.NewReader(`{"text":"aa"}`))
+	req, _ := http.NewRequest(http.MethodPost, "/items", strings.NewReader(`{"text":"aa","completed":false}`))
 	w := httptest.NewRecorder()
 	a.handler.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusCreated, w.Code, fmt.Sprintf("status: excpet 201, got %d", w.Code))
 
 	// add todo
-	req, _ = http.NewRequest(http.MethodPost, "/items", strings.NewReader(`{"text":"bb"}`))
+	req, _ = http.NewRequest(http.MethodPost, "/items", strings.NewReader(`{"text":"bb","completed":false}`))
 	w = httptest.NewRecorder()
 	a.handler.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusCreated, w.Code, fmt.Sprintf("status: excpet 201, got %d", w.Code))
 
 	// add todo
-	req, _ = http.NewRequest(http.MethodPost, "/items", strings.NewReader(`{"text":"cc"}`))
+	req, _ = http.NewRequest(http.MethodPost, "/items", strings.NewReader(`{"text":"cc","completed":false}`))
 	w = httptest.NewRecorder()
 	a.handler.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusCreated, w.Code, fmt.Sprintf("status: excpet 201, got %d", w.Code))
 
 	// list todos
-	req, _ = http.NewRequest(http.MethodGet, "/items?filter=all", nil)
+	req, _ = http.NewRequest(http.MethodGet, "/items", nil)
 	w = httptest.NewRecorder()
 	a.handler.ServeHTTP(w, req)
 	res := response{}
 	json.NewDecoder(w.Body).Decode(&res)
 	assert.Equal(t, 3, len(res.Data))
 
-	// update complete
-	req, _ = http.NewRequest(http.MethodPut, fmt.Sprintf("/items/%s", res.Data[0].ID),
-		strings.NewReader(fmt.Sprintf(`{"id":"%s","text":"dd"}`, res.Data[0].ID)))
+	// edit text
+	req, _ = http.NewRequest(http.MethodPatch, fmt.Sprintf("/items/%s", res.Data[0].ID),
+		strings.NewReader(`{"completed":false,"text":"dd"}`))
 	w = httptest.NewRecorder()
 	a.handler.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code, fmt.Sprintf("status: excpet 200, got %d", w.Code))
 
-	// complete
-	req, _ = http.NewRequest(http.MethodPost, fmt.Sprintf("/items/completes/%s", res.Data[0].ID), nil)
+	// set completed
+	req, _ = http.NewRequest(http.MethodPatch, fmt.Sprintf("/items/%s", res.Data[0].ID),
+		strings.NewReader(`{"completed":true}`))
 	w = httptest.NewRecorder()
 	a.handler.ServeHTTP(w, req)
-	assert.Equal(t, http.StatusNoContent, w.Code, fmt.Sprintf("status: excpet 204, got %d", w.Code))
+	assert.Equal(t, http.StatusOK, w.Code, fmt.Sprintf("status: excpet 200, got %d", w.Code))
 
-	// complete all
-	req, _ = http.NewRequest(http.MethodPost, "/items/completes", nil)
+	// delete
+	req, _ = http.NewRequest(http.MethodDelete, fmt.Sprintf("/items/%s", res.Data[0].ID), nil)
 	w = httptest.NewRecorder()
 	a.handler.ServeHTTP(w, req)
-	assert.Equal(t, http.StatusNoContent, w.Code, fmt.Sprintf("status: excpet 204, got %d", w.Code))
+	assert.Equal(t, http.StatusNoContent, w.Code, fmt.Sprintf("status: excpet 200, got %d", w.Code))
 
 	// list todos all complete
-	req, _ = http.NewRequest(http.MethodGet, "/items?filter=complete", nil)
+	req, _ = http.NewRequest(http.MethodGet, "/items", nil)
 	w = httptest.NewRecorder()
 	a.handler.ServeHTTP(w, req)
 	res = response{}
 	json.NewDecoder(w.Body).Decode(&res)
-	assert.Equal(t, 3, len(res.Data))
-	assert.Equal(t, true, res.Data[0].Complete)
-	assert.Equal(t, true, res.Data[1].Complete)
-	assert.Equal(t, true, res.Data[2].Complete)
-
-	// clear complete
-	req, _ = http.NewRequest(http.MethodPost, "/items/clear", nil)
-	w = httptest.NewRecorder()
-	a.handler.ServeHTTP(w, req)
-	assert.Equal(t, http.StatusNoContent, w.Code, fmt.Sprintf("status: excpet 204, got %d", w.Code))
-
-	// list all todos
-	req, _ = http.NewRequest(http.MethodGet, "/items?filter=all", nil)
-	w = httptest.NewRecorder()
-	a.handler.ServeHTTP(w, req)
-	res = response{}
-	json.NewDecoder(w.Body).Decode(&res)
-	assert.Equal(t, 0, len(res.Data))
+	assert.Equal(t, 2, len(res.Data))
 }
