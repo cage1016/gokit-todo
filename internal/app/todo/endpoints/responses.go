@@ -26,24 +26,12 @@ var (
 	_ httptransport.Headerer = (*ListResponse)(nil)
 
 	_ httptransport.StatusCoder = (*ListResponse)(nil)
-
-	_ httptransport.Headerer = (*CompleteResponse)(nil)
-
-	_ httptransport.StatusCoder = (*CompleteResponse)(nil)
-
-	_ httptransport.Headerer = (*CompleteAllResponse)(nil)
-
-	_ httptransport.StatusCoder = (*CompleteAllResponse)(nil)
-
-	_ httptransport.Headerer = (*ClearResponse)(nil)
-
-	_ httptransport.StatusCoder = (*ClearResponse)(nil)
 )
 
 // AddResponse collects the response values for the Add method.
 type AddResponse struct {
-	Res *model.Todo `json:"res"`
-	Err error       `json:"-"`
+	Res *model.TodoRes `json:"res"`
+	Err error          `json:"-"`
 }
 
 func (r AddResponse) StatusCode() int {
@@ -77,8 +65,8 @@ func (r DeleteResponse) Response() interface{} {
 
 // UpdateResponse collects the response values for the Update method.
 type UpdateResponse struct {
-	Res *model.Todo `json:"res"`
-	Err error       `json:"-"`
+	Res *model.TodoRes `json:"res"`
+	Err error          `json:"-"`
 }
 
 func (r UpdateResponse) StatusCode() int {
@@ -95,8 +83,8 @@ func (r UpdateResponse) Response() interface{} {
 
 // ListResponse collects the response values for the List method.
 type ListResponse struct {
-	Res []*model.Todo `json:"res"`
-	Err error         `json:"-"`
+	Res []*model.TodoRes `json:"res"`
+	Err error            `json:"-"`
 }
 
 func (r ListResponse) StatusCode() int {
@@ -111,53 +99,7 @@ func (r ListResponse) Response() interface{} {
 	return responses.DataRes{APIVersion: service.Version, Data: r.Res}
 }
 
-// CompleteResponse collects the response values for the Completed method.
-type CompleteResponse struct {
-	Err error `json:"-"`
-}
-
-func (r CompleteResponse) StatusCode() int {
-	return http.StatusNoContent // TBA
-}
-
-func (r CompleteResponse) Headers() http.Header {
-	return http.Header{}
-}
-
-func (r CompleteResponse) Response() interface{} {
-	return responses.DataRes{APIVersion: service.Version}
-}
-
 // CompleteAllResponse collects the response values for the CompleteAll method.
 type CompleteAllResponse struct {
 	Err error `json:"-"`
-}
-
-func (r CompleteAllResponse) StatusCode() int {
-	return http.StatusNoContent // TBA
-}
-
-func (r CompleteAllResponse) Headers() http.Header {
-	return http.Header{}
-}
-
-func (r CompleteAllResponse) Response() interface{} {
-	return responses.DataRes{APIVersion: service.Version}
-}
-
-// ClearResponse collects the response values for the Clear method.
-type ClearResponse struct {
-	Err error `json:"-"`
-}
-
-func (r ClearResponse) StatusCode() int {
-	return http.StatusNoContent // TBA
-}
-
-func (r ClearResponse) Headers() http.Header {
-	return http.Header{}
-}
-
-func (r ClearResponse) Response() interface{} {
-	return responses.DataRes{APIVersion: service.Version}
 }

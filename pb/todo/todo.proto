@@ -8,12 +8,14 @@ service Todo {
   rpc Delete(DeleteRequest) returns (DeleteResponse);
   rpc Update(UpdateRequest) returns (UpdateResponse);
   rpc List(ListRequest) returns (ListResponse);
-  rpc Complete(CompleteRequest) returns (CompleteResponse);
-  rpc CompleteAll(CompleteAllRequest) returns (CompleteAllResponse);
-  rpc Clear(ClearRequest) returns (ClearResponse);
 }
 
-message ModelTodo {
+message ModelTodoReq {
+  string text = 1;
+  bool completed = 2 ;
+}
+
+message ModelTodoRes {
   string id = 1;
   string created_at = 2;
   string updated_at = 3;
@@ -22,11 +24,11 @@ message ModelTodo {
 }
 
 message AddRequest {
-  ModelTodo todo = 1;
+  ModelTodoReq todo = 1;
 }
 
 message AddResponse {
-  ModelTodo res = 1;
+  ModelTodoRes res = 1;
   string err = 2;
 }
 
@@ -40,43 +42,19 @@ message DeleteResponse {
 
 message UpdateRequest {
   string id = 1;
-  ModelTodo todo = 2;
+  ModelTodoReq todo = 2;
 }
 
 message UpdateResponse {
-  ModelTodo res = 1;
+  ModelTodoRes res = 1;
   string err = 2;
 }
 
 message ListRequest {
-  string filter = 1;
+
 }
 
 message ListResponse {
-  repeated ModelTodo res = 1;
+  repeated ModelTodoRes res = 1;
   string err = 2;
-}
-
-message CompleteRequest {
-  string id = 1;
-}
-
-message CompleteResponse {
-  string err = 1;
-}
-
-message CompleteAllRequest {
-
-}
-
-message CompleteAllResponse {
-  string err = 1;
-}
-
-message ClearRequest {
-
-}
-
-message ClearResponse {
-  string err = 1;
 }

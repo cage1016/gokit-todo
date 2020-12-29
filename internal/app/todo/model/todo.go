@@ -7,7 +7,7 @@ import (
 )
 
 type Todo struct {
-	ID        string    `gorm:"primaryKey" json:"id" `
+	ID        string    `gorm:"primaryKey" json:"id"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 	Text      string    `json:"text"`
@@ -53,8 +53,13 @@ type TodoRepository interface {
 	Add(context.Context, *Todo) error
 	Delete(context.Context, string) error
 	Update(context.Context, *Todo) error
-	List(context.Context, string) (res []*Todo, err error)
-	Complete(context.Context, string) error
-	CompleteAll(context.Context) error
-	Clear(context.Context) error
+	List(context.Context) (res []*Todo, err error)
+	Get(context.Context, string) (res *Todo, err error)
 }
+
+type TodoReq struct {
+	Text      *string `json:"text"`
+	Completed *bool   `json:"completed"`
+}
+
+type TodoRes Todo

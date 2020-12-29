@@ -65,7 +65,7 @@ func DeleteHandler(m *bone.Mux, endpoints endpoints.Endpoints, options []httptra
 // @Produce json
 // @Router /items/:id [put]
 func UpdateHandler(m *bone.Mux, endpoints endpoints.Endpoints, options []httptransport.ServerOption, otTracer stdopentracing.Tracer, logger log.Logger) {
-	m.Put("/items/:id", httptransport.NewServer(
+	m.Patch("/items/:id", httptransport.NewServer(
 		endpoints.UpdateEndpoint,
 		decodeHTTPUpdateRequest,
 		responses.EncodeJSONResponse,
@@ -89,54 +89,6 @@ func ListHandler(m *bone.Mux, endpoints endpoints.Endpoints, options []httptrans
 	))
 }
 
-// ShowTodo godoc
-// @Summary Completed
-// @Description TODO
-// @Tags TODO
-// @Accept json
-// @Produce json
-// @Router /items/completes/:id [post]
-func CompleteHandler(m *bone.Mux, endpoints endpoints.Endpoints, options []httptransport.ServerOption, otTracer stdopentracing.Tracer, logger log.Logger) {
-	m.Post("/items/completes/:id", httptransport.NewServer(
-		endpoints.CompleteEndpoint,
-		decodeHTTPCompleteRequest,
-		responses.EncodeJSONResponse,
-		append(options, httptransport.ServerBefore(opentracing.HTTPToContext(otTracer, "Completed", logger), kitjwt.HTTPToContext()))...,
-	))
-}
-
-// ShowTodo godoc
-// @Summary CompleteAll
-// @Description TODO
-// @Tags TODO
-// @Accept json
-// @Produce json
-// @Router /items/completes [post]
-func CompleteAllHandler(m *bone.Mux, endpoints endpoints.Endpoints, options []httptransport.ServerOption, otTracer stdopentracing.Tracer, logger log.Logger) {
-	m.Post("/items/completes", httptransport.NewServer(
-		endpoints.CompleteAllEndpoint,
-		decodeHTTPCompleteAllRequest,
-		responses.EncodeJSONResponse,
-		append(options, httptransport.ServerBefore(opentracing.HTTPToContext(otTracer, "CompleteAll", logger), kitjwt.HTTPToContext()))...,
-	))
-}
-
-// ShowTodo godoc
-// @Summary Clear
-// @Description TODO
-// @Tags TODO
-// @Accept json
-// @Produce json
-// @Router /items/clear [post]
-func ClearHandler(m *bone.Mux, endpoints endpoints.Endpoints, options []httptransport.ServerOption, otTracer stdopentracing.Tracer, logger log.Logger) {
-	m.Post("/items/clear", httptransport.NewServer(
-		endpoints.ClearEndpoint,
-		decodeHTTPClearRequest,
-		responses.EncodeJSONResponse,
-		append(options, httptransport.ServerBefore(opentracing.HTTPToContext(otTracer, "Clear", logger), kitjwt.HTTPToContext()))...,
-	))
-}
-
 // NewHTTPHandler returns a handler that makes a set of endpoints available on
 // predefined paths.
 func NewHTTPHandler(endpoints endpoints.Endpoints, otTracer stdopentracing.Tracer, zipkinTracer *stdzipkin.Tracer, logger log.Logger) http.Handler { // Zipkin HTTP Server Trace can either be instantiated per endpoint with a
@@ -157,9 +109,6 @@ func NewHTTPHandler(endpoints endpoints.Endpoints, otTracer stdopentracing.Trace
 	DeleteHandler(m, endpoints, options, otTracer, logger)
 	UpdateHandler(m, endpoints, options, otTracer, logger)
 	ListHandler(m, endpoints, options, otTracer, logger)
-	CompleteHandler(m, endpoints, options, otTracer, logger)
-	CompleteAllHandler(m, endpoints, options, otTracer, logger)
-	ClearHandler(m, endpoints, options, otTracer, logger)
 	return cors.AllowAll().Handler(m)
 }
 
@@ -192,39 +141,6 @@ func decodeHTTPUpdateRequest(_ context.Context, r *http.Request) (interface{}, e
 // JSON-encoded request from the HTTP request body. Primarily useful in a server.
 func decodeHTTPListRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var req endpoints.ListRequest
-	s := bone.GetQuery(r, "filter")
-	if len(s) > 1 {
-		return nil, service.ErrInvalidQueryParams
-	}
-
-	if len(s) == 0 {
-		return nil, service.ErrInvalidQueryParams
-	}
-
-	q := s[0]
-	req.Filter = q
-	return req, nil
-}
-
-// decodeHTTPCompleteRequest is a transport/http.DecodeRequestFunc that decodes a
-// JSON-encoded request from the HTTP request body. Primarily useful in a server.
-func decodeHTTPCompleteRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var req endpoints.CompleteRequest
-	req.Id = bone.GetValue(r, "id")
-	return req, nil
-}
-
-// decodeHTTPCompleteAllRequest is a transport/http.DecodeRequestFunc that decodes a
-// JSON-encoded request from the HTTP request body. Primarily useful in a server.
-func decodeHTTPCompleteAllRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var req endpoints.CompleteAllRequest
-	return req, nil
-}
-
-// decodeHTTPClearRequest is a transport/http.DecodeRequestFunc that decodes a
-// JSON-encoded request from the HTTP request body. Primarily useful in a server.
-func decodeHTTPClearRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var req endpoints.ClearRequest
 	return req, nil
 }
 

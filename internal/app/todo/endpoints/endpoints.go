@@ -18,13 +18,10 @@ import (
 // meant to be used as a helper struct, to collect all of the endpoints into a
 // single parameter.
 type Endpoints struct {
-	AddEndpoint         endpoint.Endpoint `json:""`
-	DeleteEndpoint      endpoint.Endpoint `json:""`
-	UpdateEndpoint      endpoint.Endpoint `json:""`
-	ListEndpoint        endpoint.Endpoint `json:""`
-	CompleteEndpoint    endpoint.Endpoint `json:""`
-	CompleteAllEndpoint endpoint.Endpoint `json:""`
-	ClearEndpoint       endpoint.Endpoint `json:""`
+	AddEndpoint    endpoint.Endpoint `json:""`
+	DeleteEndpoint endpoint.Endpoint `json:""`
+	UpdateEndpoint endpoint.Endpoint `json:""`
+	ListEndpoint   endpoint.Endpoint `json:""`
 }
 
 // New return a new instance of the endpoint that wraps the provided service.
@@ -69,36 +66,6 @@ func New(svc service.TodoService, logger log.Logger, otTracer stdopentracing.Tra
 		ep.ListEndpoint = listEndpoint
 	}
 
-	var completeEndpoint endpoint.Endpoint
-	{
-		method := "complete"
-		completeEndpoint = MakeCompleteEndpoint(svc)
-		completeEndpoint = opentracing.TraceServer(otTracer, method)(completeEndpoint)
-		completeEndpoint = zipkin.TraceEndpoint(zipkinTracer, method)(completeEndpoint)
-		completeEndpoint = LoggingMiddleware(log.With(logger, "method", method))(completeEndpoint)
-		ep.CompleteEndpoint = completeEndpoint
-	}
-
-	var completeAllEndpoint endpoint.Endpoint
-	{
-		method := "completeAll"
-		completeAllEndpoint = MakeCompleteAllEndpoint(svc)
-		completeAllEndpoint = opentracing.TraceServer(otTracer, method)(completeAllEndpoint)
-		completeAllEndpoint = zipkin.TraceEndpoint(zipkinTracer, method)(completeAllEndpoint)
-		completeAllEndpoint = LoggingMiddleware(log.With(logger, "method", method))(completeAllEndpoint)
-		ep.CompleteAllEndpoint = completeAllEndpoint
-	}
-
-	var clearEndpoint endpoint.Endpoint
-	{
-		method := "clear"
-		clearEndpoint = MakeClearEndpoint(svc)
-		clearEndpoint = opentracing.TraceServer(otTracer, method)(clearEndpoint)
-		clearEndpoint = zipkin.TraceEndpoint(zipkinTracer, method)(clearEndpoint)
-		clearEndpoint = LoggingMiddleware(log.With(logger, "method", method))(clearEndpoint)
-		ep.ClearEndpoint = clearEndpoint
-	}
-
 	return ep
 }
 
@@ -117,7 +84,7 @@ func MakeAddEndpoint(svc service.TodoService) (ep endpoint.Endpoint) {
 
 // Add implements the service interface, so Endpoints may be used as a service.
 // This is primarily useful in the context of a client library.
-func (e Endpoints) Add(ctx context.Context, todo *model.Todo) (res *model.Todo, err error) {
+func (e Endpoints) Add(ctx context.Context, todo *model.TodoReq) (res *model.TodoRes, err error) {
 	resp, err := e.AddEndpoint(ctx, AddRequest{Todo: todo})
 	if err != nil {
 		return
@@ -165,7 +132,7 @@ func MakeUpdateEndpoint(svc service.TodoService) (ep endpoint.Endpoint) {
 
 // Update implements the service interface, so Endpoints may be used as a service.
 // This is primarily useful in the context of a client library.
-func (e Endpoints) Update(ctx context.Context, id string, todo *model.Todo) (res *model.Todo, err error) {
+func (e Endpoints) Update(ctx context.Context, id string, todo *model.TodoReq) (res *model.TodoRes, err error) {
 	resp, err := e.UpdateEndpoint(ctx, UpdateRequest{Id: id, Todo: todo})
 	if err != nil {
 		return
@@ -182,82 +149,18 @@ func MakeListEndpoint(svc service.TodoService) (ep endpoint.Endpoint) {
 		if err := req.validate(); err != nil {
 			return ListResponse{}, err
 		}
-		res, err := svc.List(ctx, req.Filter)
+		res, err := svc.List(ctx)
 		return ListResponse{Res: res}, err
 	}
 }
 
 // List implements the service interface, so Endpoints may be used as a service.
 // This is primarily useful in the context of a client library.
-func (e Endpoints) List(ctx context.Context, filter string) (res []*model.Todo, err error) {
-	resp, err := e.ListEndpoint(ctx, ListRequest{Filter: filter})
+func (e Endpoints) List(ctx context.Context) (res []*model.TodoRes, err error) {
+	resp, err := e.ListEndpoint(ctx, ListRequest{})
 	if err != nil {
 		return
 	}
 	response := resp.(ListResponse)
 	return response.Res, nil
-}
-
-// MakeCompleteEndpoint returns an endpoint that invokes Completed on the service.
-// Primarily useful in a server.
-func MakeCompleteEndpoint(svc service.TodoService) (ep endpoint.Endpoint) {
-	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(CompleteRequest)
-		if err := req.validate(); err != nil {
-			return CompleteResponse{}, err
-		}
-		err := svc.Complete(ctx, req.Id)
-		return CompleteResponse{}, err
-	}
-}
-
-// Complete implements the service interface, so Endpoints may be used as a service.
-// This is primarily useful in the context of a client library.
-func (e Endpoints) Complete(ctx context.Context, id string) (err error) {
-	resp, err := e.CompleteEndpoint(ctx, CompleteRequest{Id: id})
-	if err != nil {
-		return
-	}
-	_ = resp.(CompleteResponse)
-	return nil
-}
-
-// MakeCompleteAllEndpoint returns an endpoint that invokes CompleteAll on the service.
-// Primarily useful in a server.
-func MakeCompleteAllEndpoint(svc service.TodoService) (ep endpoint.Endpoint) {
-	return func(ctx context.Context, _ interface{}) (interface{}, error) {
-		err := svc.CompleteAll(ctx)
-		return CompleteAllResponse{}, err
-	}
-}
-
-// CompleteAll implements the service interface, so Endpoints may be used as a service.
-// This is primarily useful in the context of a client library.
-func (e Endpoints) CompleteAll(ctx context.Context) (err error) {
-	resp, err := e.CompleteAllEndpoint(ctx, CompleteAllRequest{})
-	if err != nil {
-		return
-	}
-	_ = resp.(CompleteAllResponse)
-	return nil
-}
-
-// MakeClearEndpoint returns an endpoint that invokes Clear on the service.
-// Primarily useful in a server.
-func MakeClearEndpoint(svc service.TodoService) (ep endpoint.Endpoint) {
-	return func(ctx context.Context, _ interface{}) (interface{}, error) {
-		err := svc.Clear(ctx)
-		return ClearResponse{}, err
-	}
-}
-
-// Clear implements the service interface, so Endpoints may be used as a service.
-// This is primarily useful in the context of a client library.
-func (e Endpoints) Clear(ctx context.Context) (err error) {
-	resp, err := e.ClearEndpoint(ctx, ClearRequest{})
-	if err != nil {
-		return
-	}
-	_ = resp.(ClearResponse)
-	return nil
 }

@@ -19,6 +19,15 @@ type todoRepository struct {
 	db  *gorm.DB
 }
 
+func (repo *todoRepository) Get(ctx context.Context, todoID string) (res *model.Todo, err error) {
+	repo.mu.Lock()
+	defer repo.mu.Unlock()
+
+	res = new(model.Todo)
+	err = repo.db.WithContext(ctx).Where("id", todoID).Find(res).Error
+	return
+}
+
 func (repo *todoRepository) Add(ctx context.Context, todo *model.Todo) error {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
@@ -43,8 +52,7 @@ func (repo *todoRepository) Update(ctx context.Context, todo *model.Todo) error 
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 
-	// result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todo.ID}).UpdateColumn("text", todo.Text)
-	result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todo.ID}).UpdateColumns(&model.Todo{Text: todo.Text, Completed: todo.Completed})
+	result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todo.ID}).UpdateColumns(map[string]interface{}{"text": todo.Text, "completed": todo.Completed})
 	if result.Error != nil {
 		return result.Error
 	}
@@ -54,68 +62,12 @@ func (repo *todoRepository) Update(ctx context.Context, todo *model.Todo) error 
 	return nil
 }
 
-func (repo *todoRepository) CompleteAll(ctx context.Context) error {
-	repo.mu.Lock()
-	defer repo.mu.Unlock()
-
-	var nonCompleteCount int64
-	if err := repo.db.WithContext(ctx).Model(&model.Todo{}).Where("completed = ?", false).Count(&nonCompleteCount).Error; err != nil {
-		return err
-	}
-
-	if nonCompleteCount > 0 {
-		if err := repo.db.WithContext(ctx).Exec("UPDATE todos SET completed = true").Error; err != nil {
-			return err
-		}
-	} else {
-		if err := repo.db.WithContext(ctx).Exec("UPDATE todos SET completed = false").Error; err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (repo *todoRepository) Complete(ctx context.Context, todoID string) error {
-	repo.mu.Lock()
-	defer repo.mu.Unlock()
-
-	result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todoID}).UpdateColumn("completed", gorm.Expr("NOT completed"))
-	if result.Error != nil {
-		return result.Error
-	}
-	if result.RowsAffected == 0 {
-		return service.ErrNotFound
-	}
-	return nil
-}
-
-func (repo *todoRepository) List(ctx context.Context, filter string) (res []*model.Todo, err error) {
+func (repo *todoRepository) List(ctx context.Context) (res []*model.Todo, err error) {
 	repo.mu.RLock()
 	defer repo.mu.RUnlock()
 
-	db := repo.db.WithContext(ctx)
-	switch filter {
-	case service.ACTIVE:
-		db = db.Where("completed", false)
-		break
-	case service.COMPLETE:
-		db = db.Where("completed", true)
-		break
-	case service.ALL:
-		break
-	default:
-
-	}
-
-	err = db.Order("created_at").Find(&res).Error
+	err = repo.db.WithContext(ctx).Order("created_at desc").Find(&res).Error
 	return
-}
-
-func (repo *todoRepository) Clear(ctx context.Context) error {
-	if err := repo.db.WithContext(ctx).Where("completed", true).Delete(&model.Todo{}).Error; err != nil {
-		return err
-	}
-	return nil
 }
 
 func New(db *gorm.DB, logger log.Logger) model.TodoRepository {

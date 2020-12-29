@@ -7,15 +7,14 @@ POST {{hostname}}/items HTTP/1.1
 Content-Type: application/json
 
 {
-    "text": "ee"
+    "text": "dd",
+    "completed": false
 }
 
 
 ###
 # @name list
-# filter=all,active,complete
-@filter = all
-GET {{hostname}}/items/?filter={{filter}} HTTP/1.1
+GET {{hostname}}/items HTTP/1.1
 
 
 ### 
@@ -25,25 +24,10 @@ DELETE {{hostname}}/items/{{list.response.body.data[0].id}} HTTP/1.1
 
 ###
 # @name edit
-PUT {{hostname}}/items/{{list.response.body.data[0].id}} HTTP/1.1
+PATCH  {{hostname}}/items/{{list.response.body.data[0].id}} HTTP/1.1
 Content-Type: application/json
 
 {
-    "id": "{{list.response.body.data[0].id}}",
+    "completed": true,
     "text": "111"
 }
-
-
-###
-# @name complete
-POSt {{hostname}}/items/completes/{{list.response.body.data[0].id}} HTTP/1.1
-
-
-###
-# @name completeAll
-POST {{hostname}}/items/completes HTTP/1.1
-
-
-###
-# @name clear
-POST {{hostname}}/items/clear

@@ -45,7 +45,7 @@ func TestAddHandler(t *testing.T) {
 			name: "add todo",
 			prepare: func(f *fields) {
 				gomock.InOrder(
-					f.svc.EXPECT().Add(gomock.Any(), gomock.Any()).Return(&model.Todo{
+					f.svc.EXPECT().Add(gomock.Any(), gomock.Any()).Return(&model.TodoRes{
 						ID:        "iKe0KxpurIn0E_6vzUDAr",
 						CreatedAt: time.Now(),
 						UpdatedAt: time.Now(),
@@ -58,7 +58,7 @@ func TestAddHandler(t *testing.T) {
 			args: args{
 				method: http.MethodPost,
 				url:    "/items",
-				body:   `{"text":"aa"}`,
+				body:   `{"text":"aa", "completed": false}`,
 			},
 			checkFunc: func(res *http.Response, err error, body []byte) {
 				assert.Nil(t, err, fmt.Sprintf("unexpected error %s", err))

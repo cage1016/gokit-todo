@@ -35,10 +35,10 @@ func (m *MockTodoService) EXPECT() *MockTodoServiceMockRecorder {
 }
 
 // Add mocks base method
-func (m *MockTodoService) Add(arg0 context.Context, arg1 *model.Todo) (*model.Todo, error) {
+func (m *MockTodoService) Add(arg0 context.Context, arg1 *model.TodoReq) (*model.TodoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Add", arg0, arg1)
-	ret0, _ := ret[0].(*model.Todo)
+	ret0, _ := ret[0].(*model.TodoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -47,48 +47,6 @@ func (m *MockTodoService) Add(arg0 context.Context, arg1 *model.Todo) (*model.To
 func (mr *MockTodoServiceMockRecorder) Add(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockTodoService)(nil).Add), arg0, arg1)
-}
-
-// Clear mocks base method
-func (m *MockTodoService) Clear(arg0 context.Context) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Clear", arg0)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Clear indicates an expected call of Clear
-func (mr *MockTodoServiceMockRecorder) Clear(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Clear", reflect.TypeOf((*MockTodoService)(nil).Clear), arg0)
-}
-
-// Complete mocks base method
-func (m *MockTodoService) Complete(arg0 context.Context, arg1 string) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Completed", arg0, arg1)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Complete indicates an expected call of Complete
-func (mr *MockTodoServiceMockRecorder) Complete(arg0, arg1 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Completed", reflect.TypeOf((*MockTodoService)(nil).Complete), arg0, arg1)
-}
-
-// CompleteAll mocks base method
-func (m *MockTodoService) CompleteAll(arg0 context.Context) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CompleteAll", arg0)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// CompleteAll indicates an expected call of CompleteAll
-func (mr *MockTodoServiceMockRecorder) CompleteAll(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CompleteAll", reflect.TypeOf((*MockTodoService)(nil).CompleteAll), arg0)
 }
 
 // Delete mocks base method
@@ -106,25 +64,25 @@ func (mr *MockTodoServiceMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Ca
 }
 
 // List mocks base method
-func (m *MockTodoService) List(arg0 context.Context, arg1 string) ([]*model.Todo, error) {
+func (m *MockTodoService) List(arg0 context.Context) ([]*model.TodoRes, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "List", arg0, arg1)
-	ret0, _ := ret[0].([]*model.Todo)
+	ret := m.ctrl.Call(m, "List", arg0)
+	ret0, _ := ret[0].([]*model.TodoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // List indicates an expected call of List
-func (mr *MockTodoServiceMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockTodoServiceMockRecorder) List(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockTodoService)(nil).List), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockTodoService)(nil).List), arg0)
 }
 
 // Update mocks base method
-func (m *MockTodoService) Update(arg0 context.Context, arg1 string, arg2 *model.Todo) (*model.Todo, error) {
+func (m *MockTodoService) Update(arg0 context.Context, arg1 string, arg2 *model.TodoReq) (*model.TodoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1, arg2)
-	ret0, _ := ret[0].(*model.Todo)
+	ret0, _ := ret[0].(*model.TodoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
