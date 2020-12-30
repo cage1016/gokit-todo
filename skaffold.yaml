@@ -19,3 +19,11 @@ deploy:
   kubectl:
     manifests:
     - ./deployments/k8s-nginx-ingress.yaml
+
+
+profiles:
+  - name: istio
+    deploy:
+      kubectl:
+        manifests: 
+        - ./deployments/k8s-istio.yaml
