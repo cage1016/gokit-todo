@@ -96,6 +96,35 @@ this demo support `nginx-ingress` or `istio`
     ```sh
     helm uninstall ingress-nginx
     ```  
+
+## Testing
+
+1. `Makefile`
+    ```sh
+    $ make
+      down                           docker-compose down
+      generate                       Regenerates OPA data from rego files
+      help                           this help
+      mod                            tidy go mod
+      run                            docker-compose stop & up
+      stop                           docker-compose stop
+      test                           test: run unit test
+      test-e2e                       test-e2e: run e2e test
+      test-integration               test-integration: run integration test
+      up                             docker-compose up
+    ```
+2. unit test
+    ```sh
+    make test
+    ```
+3. unit integration test by docker-compose
+    ```sh
+    make test-integration
+    ```
+4. unit e2e test by docker-compose
+    ```sh
+    make test-e2e
+    ```
 ## License
 
 Copyright © 2020 [kaichu.io](https://kaichu.io/).<br />
