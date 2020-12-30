@@ -22,12 +22,12 @@ import (
 	"google.golang.org/grpc/reflection"
 	"gorm.io/gorm"
 
-	"github.com/cage1016/todo/internal/app/todo/endpoints"
-	"github.com/cage1016/todo/internal/app/todo/postgres"
-	"github.com/cage1016/todo/internal/app/todo/service"
-	transportsgrpc "github.com/cage1016/todo/internal/app/todo/transports/grpc"
-	transportshttp "github.com/cage1016/todo/internal/app/todo/transports/http"
-	pb "github.com/cage1016/todo/pb/todo"
+	"github.com/cage1016/gokit-todo/internal/app/todo/endpoints"
+	"github.com/cage1016/gokit-todo/internal/app/todo/postgres"
+	"github.com/cage1016/gokit-todo/internal/app/todo/service"
+	transportsgrpc "github.com/cage1016/gokit-todo/internal/app/todo/transports/grpc"
+	transportshttp "github.com/cage1016/gokit-todo/internal/app/todo/transports/http"
+	pb "github.com/cage1016/gokit-todo/pb/todo"
 )
 
 const (

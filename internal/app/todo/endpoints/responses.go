@@ -5,9 +5,9 @@ import (
 
 	httptransport "github.com/go-kit/kit/transport/http"
 
-	"github.com/cage1016/todo/internal/app/todo/model"
-	"github.com/cage1016/todo/internal/app/todo/service"
-	"github.com/cage1016/todo/internal/pkg/responses"
+	"github.com/cage1016/gokit-todo/internal/app/todo/model"
+	"github.com/cage1016/gokit-todo/internal/app/todo/service"
+	"github.com/cage1016/gokit-todo/internal/pkg/responses"
 )
 
 var (

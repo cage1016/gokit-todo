@@ -1,4 +1,4 @@
-module github.com/cage1016/todo
+module github.com/cage1016/gokit-todo
 
 go 1.14
 

@@ -1,8 +1,8 @@
 package endpoints
 
 import (
-	"github.com/cage1016/todo/internal/app/todo/model"
-	"github.com/cage1016/todo/internal/app/todo/service"
+	"github.com/cage1016/gokit-todo/internal/app/todo/model"
+	"github.com/cage1016/gokit-todo/internal/app/todo/service"
 )
 
 type Request interface {

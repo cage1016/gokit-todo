@@ -1,10 +1,11 @@
 package transports
 
 import (
-	pb "github.com/cage1016/todo/pb/todo"
 	"time"
 
-	"github.com/cage1016/todo/internal/app/todo/model"
+	pb "github.com/cage1016/gokit-todo/pb/todo"
+
+	"github.com/cage1016/gokit-todo/internal/app/todo/model"
 )
 
 func ModelReqToPB(todo *model.TodoReq) *pb.ModelTodoReq {

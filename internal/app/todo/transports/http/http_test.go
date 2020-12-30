@@ -18,11 +18,11 @@ import (
 	"github.com/openzipkin/zipkin-go"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/cage1016/todo/internal/app/todo/endpoints"
-	"github.com/cage1016/todo/internal/app/todo/model"
-	transports "github.com/cage1016/todo/internal/app/todo/transports/http"
-	automocks "github.com/cage1016/todo/internal/mocks/app/todo/service"
-	test "github.com/cage1016/todo/test/util"
+	"github.com/cage1016/gokit-todo/internal/app/todo/endpoints"
+	"github.com/cage1016/gokit-todo/internal/app/todo/model"
+	transports "github.com/cage1016/gokit-todo/internal/app/todo/transports/http"
+	automocks "github.com/cage1016/gokit-todo/internal/mocks/app/todo/service"
+	test "github.com/cage1016/gokit-todo/test/util"
 )
 
 func TestAddHandler(t *testing.T) {

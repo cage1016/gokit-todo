@@ -12,9 +12,9 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/cage1016/todo/internal/app/todo/model"
-	"github.com/cage1016/todo/internal/app/todo/service"
-	automocks "github.com/cage1016/todo/internal/mocks/app/todo/model"
+	"github.com/cage1016/gokit-todo/internal/app/todo/model"
+	"github.com/cage1016/gokit-todo/internal/app/todo/service"
+	automocks "github.com/cage1016/gokit-todo/internal/mocks/app/todo/model"
 )
 
 func TestStubTodoService_Add(t *testing.T) {

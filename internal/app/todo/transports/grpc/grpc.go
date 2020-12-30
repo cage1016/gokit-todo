@@ -15,11 +15,11 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/cage1016/todo/internal/app/todo/endpoints"
-	"github.com/cage1016/todo/internal/app/todo/model"
-	"github.com/cage1016/todo/internal/app/todo/service"
-	"github.com/cage1016/todo/internal/pkg/errors"
-	pb "github.com/cage1016/todo/pb/todo"
+	"github.com/cage1016/gokit-todo/internal/app/todo/endpoints"
+	"github.com/cage1016/gokit-todo/internal/app/todo/model"
+	"github.com/cage1016/gokit-todo/internal/app/todo/service"
+	"github.com/cage1016/gokit-todo/internal/pkg/errors"
+	pb "github.com/cage1016/gokit-todo/pb/todo"
 )
 
 type grpcServer struct {

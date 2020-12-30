@@ -12,11 +12,11 @@ import (
 	"github.com/openzipkin/zipkin-go"
 	"gorm.io/gorm"
 
-	"github.com/cage1016/todo/internal/app/todo/endpoints"
-	"github.com/cage1016/todo/internal/app/todo/postgres"
-	"github.com/cage1016/todo/internal/app/todo/service"
-	transports "github.com/cage1016/todo/internal/app/todo/transports/http"
-	"github.com/cage1016/todo/internal/pkg/errors"
+	"github.com/cage1016/gokit-todo/internal/app/todo/endpoints"
+	"github.com/cage1016/gokit-todo/internal/app/todo/postgres"
+	"github.com/cage1016/gokit-todo/internal/app/todo/service"
+	transports "github.com/cage1016/gokit-todo/internal/app/todo/transports/http"
+	"github.com/cage1016/gokit-todo/internal/pkg/errors"
 )
 
 const (

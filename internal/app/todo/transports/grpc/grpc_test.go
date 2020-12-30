@@ -16,11 +16,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 
-	"github.com/cage1016/todo/internal/app/todo/endpoints"
-	"github.com/cage1016/todo/internal/app/todo/model"
-	transports "github.com/cage1016/todo/internal/app/todo/transports/grpc"
-	automocks "github.com/cage1016/todo/internal/mocks/app/todo/service"
-	pb "github.com/cage1016/todo/pb/todo"
+	"github.com/cage1016/gokit-todo/internal/app/todo/endpoints"
+	"github.com/cage1016/gokit-todo/internal/app/todo/model"
+	transports "github.com/cage1016/gokit-todo/internal/app/todo/transports/grpc"
+	automocks "github.com/cage1016/gokit-todo/internal/mocks/app/todo/service"
+	pb "github.com/cage1016/gokit-todo/pb/todo"
 )
 
 const (

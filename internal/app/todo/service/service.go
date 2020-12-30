@@ -6,8 +6,8 @@ import (
 
 	gonanoid "github.com/matoous/go-nanoid"
 
-	"github.com/cage1016/todo/internal/app/todo/model"
-	"github.com/cage1016/todo/internal/pkg/errors"
+	"github.com/cage1016/gokit-todo/internal/app/todo/model"
+	"github.com/cage1016/gokit-todo/internal/pkg/errors"
 	"github.com/go-kit/kit/log"
 )
 

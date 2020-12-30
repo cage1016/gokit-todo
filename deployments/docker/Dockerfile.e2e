@@ -6,7 +6,7 @@ RUN set -ex; \
     apk add --no-cache git build-base
 
 # Set working directory
-WORKDIR /go/src/github.com/cage1016/todo/
+WORKDIR /go/src/github.com/cage1016/gokit-todo/
 
 COPY . .
 

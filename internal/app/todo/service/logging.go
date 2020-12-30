@@ -7,7 +7,7 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 
-	"github.com/cage1016/todo/internal/app/todo/model"
+	"github.com/cage1016/gokit-todo/internal/app/todo/model"
 )
 
 type loggingMiddleware struct {

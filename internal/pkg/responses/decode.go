@@ -11,7 +11,7 @@ import (
 	httptransport "github.com/go-kit/kit/transport/http"
 	"google.golang.org/grpc/status"
 
-	"github.com/cage1016/todo/internal/pkg/errors"
+	"github.com/cage1016/gokit-todo/internal/pkg/errors"
 )
 
 const (

@@ -12,8 +12,8 @@ import (
 
 	"gotest.tools/assert"
 
-	"github.com/cage1016/todo/internal/app/todo/model"
-	"github.com/cage1016/todo/internal/pkg/responses"
+	"github.com/cage1016/gokit-todo/internal/app/todo/model"
+	"github.com/cage1016/gokit-todo/internal/pkg/responses"
 )
 
 type response struct {

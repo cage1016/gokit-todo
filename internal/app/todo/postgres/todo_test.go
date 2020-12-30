@@ -14,8 +14,8 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"github.com/cage1016/todo/internal/app/todo/model"
-	psql "github.com/cage1016/todo/internal/app/todo/postgres"
+	"github.com/cage1016/gokit-todo/internal/app/todo/model"
+	psql "github.com/cage1016/gokit-todo/internal/app/todo/postgres"
 )
 
 func TestTodoRepository_Add(t *testing.T) {

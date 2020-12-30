@@ -6,7 +6,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"github.com/cage1016/todo/internal/app/todo/model"
+	"github.com/cage1016/gokit-todo/internal/app/todo/model"
 )
 
 // Config defines the options that are used when connecting to a PostgreSQL instance

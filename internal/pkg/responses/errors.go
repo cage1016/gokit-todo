@@ -1,7 +1,7 @@
 package responses
 
 import (
-	"github.com/cage1016/todo/internal/pkg/errors"
+	"github.com/cage1016/gokit-todo/internal/pkg/errors"
 )
 
 type ErrorWrapper struct {
