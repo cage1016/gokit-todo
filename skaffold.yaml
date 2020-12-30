@@ -18,4 +18,4 @@ build:
 deploy:
   kubectl:
     manifests:
-    - ./deployments/k8s.yaml
+    - ./deployments/k8s-nginx-ingress.yaml

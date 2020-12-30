@@ -93,20 +93,66 @@ spec:
       name: grpc
       targetPort: 10121
 ---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: todo-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+        - path: /api/v1/todo(/|$)(.*)
+          backend:
+            serviceName: todo
+            servicePort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: index.docker.io/cage1016/gokit-todo-frontend:latest
+---
 kind: Service
 apiVersion: v1
 metadata:
-  name: todo-external
-  labels:
-    app: todo
+  name: frontend
 spec:
-  type: LoadBalancer
   selector:
-    app: todo
+    app: frontend
   ports:
-    - port: 10120
+    - port: 80
       name: http
-      targetPort: 10120
-    - port: 10121
-      name: grpc
-      targetPort: 10121
+      targetPort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: frontend-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+        - path:
+          backend:
+            serviceName: frontend
+            servicePort: 80            
