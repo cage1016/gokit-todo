@@ -1,6 +1,6 @@
 # gokit-todo
 
-![GitHub Workflow Status](https://github.com/cage1016/gokit-todo/workflows/run%20tests/badge.svg)
+![GitHub Workflow Status](https://github.com/cage1016/gokit-todo/workflows/ci/badge.svg)
 [![GoDev](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/cage1016/gokit-todo)
 [![codecov](https://codecov.io/gh/cage1016/gokit-todo/branch/master/graph/badge.svg)](https://codecov.io/gh/cage1016/gokit-todo)
 [![Go Report Card](https://goreportcard.com/badge/cage1016/gokit-todo)](https://goreportcard.com/report/cage1016/gokit-todo)
