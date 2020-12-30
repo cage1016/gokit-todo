@@ -31,7 +31,7 @@ endif
 .PHONY: test
 test: ## test: run unit test
 	# DEBUG=true bash -c "go test -v github.com/qeek-dev/retailbase/<package-name> -run ..."
-	go test -v -race -cover -coverprofile unit_cover.out ./...
+	go test -v -race -cover -coverprofile coverage.txt -covermode=atomic ./...
 
 .PHONY: test-integration
 test-integration: ## test-integration: run integration test
