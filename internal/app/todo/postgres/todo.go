@@ -8,7 +8,6 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/cage1016/gokit-todo/internal/app/todo/model"
-	"github.com/cage1016/gokit-todo/internal/app/todo/service"
 )
 
 var _ model.TodoRepository = (*todoRepository)(nil)
@@ -55,9 +54,6 @@ func (repo *todoRepository) Update(ctx context.Context, todo *model.Todo) error 
 	result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todo.ID}).UpdateColumns(map[string]interface{}{"text": todo.Text, "completed": todo.Completed})
 	if result.Error != nil {
 		return result.Error
-	}
-	if result.RowsAffected == 0 {
-		return service.ErrNotFound
 	}
 	return nil
 }

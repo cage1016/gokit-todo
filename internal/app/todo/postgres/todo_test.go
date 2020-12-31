@@ -4,6 +4,7 @@ package postgres_test
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"os"
 	"regexp"
@@ -40,10 +41,11 @@ func TestTodoRepository_Add(t *testing.T) {
 	}
 
 	tests := []struct {
-		name    string
-		prepare func(f *fields)
-		args    args
-		wantErr bool
+		name      string
+		prepare   func(f *fields)
+		args      args
+		checkFunc func(err error)
+		wantErr   bool
 	}{
 		{
 			name: "Add Todo",
@@ -55,6 +57,23 @@ func TestTodoRepository_Add(t *testing.T) {
 			},
 			args:    args{todo: mTodo},
 			wantErr: false,
+		},
+		{
+			name: "Add Todo Fail without primary key",
+			prepare: func(f *fields) {
+				f.mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "todos" ("id","created_at","updated_at","text","completed") VALUES ($1,$2,$3,$4,$5)`)).
+					WithArgs(mTodo.ID, mTodo.CreatedAt, mTodo.UpdatedAt, mTodo.Text, mTodo.Completed).
+					WillReturnResult(sqlmock.NewResult(0, 0)).
+					WillReturnError(sql.ErrNoRows)
+			},
+			args: args{todo: func() *model.Todo {
+				mTodo.ID = ""
+				return mTodo
+			}()},
+			checkFunc: func(err error) {
+				assert.Equal(t, err, sql.ErrNoRows, fmt.Sprintf("err: expected sql.ErrNoRows got %v", err))
+			},
+			wantErr: true,
 		},
 	}
 
@@ -77,6 +96,10 @@ func TestTodoRepository_Add(t *testing.T) {
 
 			if err := repo.Add(context.Background(), tt.args.todo); (err != nil) != tt.wantErr {
 				t.Errorf("Add(ctx context.Context) error = %v, wantErr %v", err, tt.wantErr)
+			} else {
+				if tt.checkFunc != nil {
+					tt.checkFunc(err)
+				}
 			}
 		})
 	}
@@ -255,10 +278,11 @@ func TestTodoRepository_Delete(t *testing.T) {
 	}
 
 	tests := []struct {
-		name    string
-		prepare func(f *fields)
-		args    args
-		wantErr bool
+		name      string
+		prepare   func(f *fields)
+		args      args
+		checkFunc func(err error)
+		wantErr   bool
 	}{
 		{
 			name: "Delete Todo",
@@ -268,6 +292,20 @@ func TestTodoRepository_Delete(t *testing.T) {
 			},
 			args:    args{todoID: mTodo.ID},
 			wantErr: false,
+		},
+		{
+			name: "Delete Todo fail not found",
+			prepare: func(f *fields) {
+				f.mock.ExpectExec(regexp.QuoteMeta(`DELETE FROM "todos" WHERE "todos"."id" = $1`)).
+					WithArgs(sqlmock.AnyArg()).
+					WillReturnResult(sqlmock.NewResult(0, 0)).
+					WillReturnError(sql.ErrNoRows)
+			},
+			args:    args{todoID: mTodo.ID},
+			wantErr: true,
+			checkFunc: func(err error) {
+				assert.Equal(t, err, sql.ErrNoRows, fmt.Sprintf("err: expected sql.ErrNoRows got %v", err))
+			},
 		},
 	}
 
@@ -290,6 +328,10 @@ func TestTodoRepository_Delete(t *testing.T) {
 
 			if err := repo.Delete(context.Background(), tt.args.todoID); (err != nil) != tt.wantErr {
 				t.Errorf("Delete(ctx context.Context id string) error = %v, wantErr %v", err, tt.wantErr)
+			} else {
+				if tt.checkFunc != nil {
+					tt.checkFunc(err)
+				}
 			}
 		})
 	}
@@ -315,10 +357,11 @@ func TestTodoRepository_Update(t *testing.T) {
 	}
 
 	tests := []struct {
-		name    string
-		prepare func(f *fields)
-		args    args
-		wantErr bool
+		name      string
+		prepare   func(f *fields)
+		args      args
+		checkFunc func(err error)
+		wantErr   bool
 	}{
 		{
 			name: "Update Todo",
@@ -328,6 +371,20 @@ func TestTodoRepository_Update(t *testing.T) {
 			},
 			args:    args{todo: mTodo},
 			wantErr: false,
+		},
+		{
+			name: "Update Todo fail with wrong type",
+			prepare: func(f *fields) {
+				f.mock.ExpectExec(regexp.QuoteMeta(`UPDATE "todos"`)).
+					WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).
+					WillReturnResult(sqlmock.NewResult(0, 0)).
+					WillReturnError(sql.ErrNoRows)
+			},
+			args:    args{todo: mTodo},
+			wantErr: true,
+			checkFunc: func(err error) {
+				assert.Equal(t, err, sql.ErrNoRows, fmt.Sprintf("err: expected sql.ErrNoRows got %v", err))
+			},
 		},
 	}
 
@@ -350,6 +407,10 @@ func TestTodoRepository_Update(t *testing.T) {
 
 			if err := repo.Update(context.Background(), tt.args.todo); (err != nil) != tt.wantErr {
 				t.Errorf("Update(ctx context.Context todo *model.Todo) error = %v, wantErr %v", err, tt.wantErr)
+			} else {
+				if tt.checkFunc != nil {
+					tt.checkFunc(err)
+				}
 			}
 		})
 	}
