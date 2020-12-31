@@ -12,7 +12,7 @@
 | todo     | todoMVC backend API   |
 | [gokit-todo-frontend](https://github.com/cage1016/gokit-todo-frontend)| todoMVC client        |
 
-![gokit-todo](image.png)
+![gokit-todo](image.gif)
 
 ## Features
 
