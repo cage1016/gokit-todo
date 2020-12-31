@@ -20,7 +20,7 @@ down: ## docker-compose down
 
 .PHONY: generate
 HAVE_GO_BINDATA := $(shell command -v mockgen 2> /dev/null)
-generate: ## Regenerates OPA data from rego files
+generate: ## Regenerates GRPC proto and gomock
 ifndef HAVE_GO_BINDATA
 	@echo "requires 'mockgen' (GO111MODULE=on go get github.com/golang/mock/mockgen@v1.4.4)"
 	@exit 1 # fail

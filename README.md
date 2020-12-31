@@ -1,15 +1,16 @@
 # gokit-todo
 
 ![GitHub Workflow Status](https://github.com/cage1016/gokit-todo/workflows/ci/badge.svg)
+[!["GitHub Discussions"](https://img.shields.io/badge/%20GitHub-%20Discussions-gray.svg?longCache=true&logo=github&colorB=purple)](https://github.com/cage1016/gokit-todo/discussions)
 [![GoDev](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/cage1016/gokit-todo)
 [![codecov](https://codecov.io/gh/cage1016/gokit-todo/branch/master/graph/badge.svg)](https://codecov.io/gh/cage1016/gokit-todo)
 [![Go Report Card](https://goreportcard.com/badge/cage1016/gokit-todo)](https://goreportcard.com/report/cage1016/gokit-todo)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
-| Service | Description           |
-| ------- | --------------------- |
-| todo    | todoMVC backend API   |
-| frontend| todoMVC client        |
+| Service  | Description           |
+| -------- | --------------------- |
+| todo     | todoMVC backend API   |
+| [gokit-todo-frontend](https://github.com/cage1016/gokit-todo-frontend)| todoMVC client        |
 
 ![gokit-todo](image.png)
 
@@ -28,10 +29,25 @@
 
 ## Motivation
 
+I use [go-kit/kit](https://github.com/go-kit/kit)(microservices toolkit) to build business project and run on Kubernetes and Istio. I also to give few talks about How i use gokit
+ - [GoPherCon 2020 TW: 如何透過 Go-kit 快速搭建微服務架構應用程式實戰 ｜ KaiChu](https://kaichu.io/posts/gokit-engineering-operation/)
+ - [GDG Cloud Taipei meetup #50 - Build go kit microservices at kubernete…](https://www2.slideshare.net/cagechung/gdg-cloud-taipei-meetup-50-build-go-kit-microservices-at-kubernetes-with-ease-206252668)
+- [GDG Devfest 2019 - Build go kit microservices at kubernetes with ease](https://www2.slideshare.net/cagechung/gdg-devfest-2019-build-go-kit-microservices-at-kubernetes-with-ease)
+- [cage1016/gokit-workshop](https://github.com/cage1016/gokit-workshop)
+
+Go kit microservices toolkit include many microservices components itself (auth, circuitbreaker, ratelimit etcs.). We build microservices application and deploy to Kubernetes. We could drop those microservices components out with Service Mesh soluation (Istion Envoy proxy) and keep single microservice core business logic clear without any infra codes.
+
+This demo project is [todomvc/gokit-todo-frontend](https://github.com/cage1016/gokit-todo-frontend) backend API implemented by gokit microservice tookit with best practice by myself.
+
 ## Goals
-
-## Non-goals
-
+- **Project**: quick start a new microservice by toolchain [cage1016/gk](https://github.com/cage1016/gk/tree/feature/gokitconsulk8sistio). Team member could follow same guideline to develop microservice quickly.
+  - project layout
+- **Testing**: how to write `unit` test with table test `go-sqlmock` and `gomock`. `integration` test, `e2e` test with `TestMain` and `docker-compose`
+- **DevOps**: setup CI/CD workflow to increase devops lifecycle
+  - skaffold
+  - github action (CI)
+  - Kubernetes
+  - Istio
 ## Install
 
 this demo support `nginx-ingress` or `istio`
@@ -103,7 +119,7 @@ this demo support `nginx-ingress` or `istio`
     ```sh
     $ make
       down                           docker-compose down
-      generate                       Regenerates OPA data from rego files
+      generate                       Regenerates GRPC proto and gomock
       help                           this help
       mod                            tidy go mod
       run                            docker-compose stop & up
