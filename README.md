@@ -50,8 +50,19 @@ This demo project is [todomvc/gokit-todo-frontend](https://github.com/cage1016/g
   - Istio
 ## Install
 
-this demo support `nginx-ingress` or `istio`
+this demo support `docker-compose` or `nginx-ingress` and `istio`
 
+### Docker-Compose
+
+1. Run todomvc frontend & gokit-todo backend API with docker-compose
+    ```sh
+    docker-compose -f docker-compose.full.yaml up -d
+    ```
+2. Visit http://localhost:8080 for demo
+3. Clean docker-compose
+    ```sh
+    docker-compose -f docker-compose.full.yaml down --volume
+    ```
 ### k8s + Istio 
 
 1. Prepare a Kubernetes cluster
