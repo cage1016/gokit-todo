@@ -367,7 +367,8 @@ func TestTodoRepository_Update(t *testing.T) {
 			name: "Update Todo",
 			prepare: func(f *fields) {
 				f.mock.ExpectExec(regexp.QuoteMeta(`UPDATE "todos"`)).
-					WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).WillReturnResult(sqlmock.NewResult(0, 1))
+					WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).
+					WillReturnResult(sqlmock.NewResult(0, 1))
 			},
 			args:    args{todo: mTodo},
 			wantErr: false,
@@ -376,7 +377,7 @@ func TestTodoRepository_Update(t *testing.T) {
 			name: "Update Todo fail with wrong type",
 			prepare: func(f *fields) {
 				f.mock.ExpectExec(regexp.QuoteMeta(`UPDATE "todos"`)).
-					WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).
+					WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).
 					WillReturnResult(sqlmock.NewResult(0, 0)).
 					WillReturnError(sql.ErrNoRows)
 			},

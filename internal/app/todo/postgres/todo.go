@@ -51,7 +51,13 @@ func (repo *todoRepository) Update(ctx context.Context, todo *model.Todo) error 
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 
-	result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todo.ID}).UpdateColumns(map[string]interface{}{"text": todo.Text, "completed": todo.Completed})
+	result := repo.db.WithContext(ctx).Model(&model.Todo{ID: todo.ID}).UpdateColumns(
+		map[string]interface{}{
+			"text":       todo.Text,
+			"completed":  todo.Completed,
+			"updated_at": todo.UpdatedAt,
+		},
+	)
 	if result.Error != nil {
 		return result.Error
 	}
