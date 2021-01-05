@@ -341,7 +341,11 @@ func grpcEncodeError(err errors.Error) error {
 	}
 
 	switch {
-	// TODO write your own custom error check here
+	case errors.Contains(err, service.ErrInvalidQueryParams),
+		errors.Contains(err, service.ErrMalformedEntity):
+		return status.Error(codes.InvalidArgument, err.Error())
+	case errors.Contains(err, service.ErrNotFound):
+		return status.Error(codes.NotFound, err.Error())
 	case errors.Contains(err, kitjwt.ErrTokenContextMissing):
 		return status.Error(codes.Unauthenticated, err.Error())
 	default:
