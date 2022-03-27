@@ -3,6 +3,8 @@ package postgres
 import (
 	"fmt"
 
+	_ "github.com/GoogleCloudPlatform/cloudsql-proxy/proxy/dialers/postgres"
+	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
@@ -20,6 +22,7 @@ type Config struct {
 	SSLCert     string
 	SSLKey      string
 	SSLRootCert string
+	DriverName  string
 }
 
 // Connect creates a connection to the PostgreSQL instance and applies any
@@ -28,7 +31,10 @@ type Config struct {
 func Connect(cfg Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s sslcert=%s sslkey=%s sslrootcert=%s", cfg.Host, cfg.Port, cfg.User, cfg.Name, cfg.Pass, cfg.SSLMode, cfg.SSLCert, cfg.SSLKey, cfg.SSLRootCert)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DriverName: cfg.DriverName,
+		DSN:        dsn,
+	}), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}

@@ -46,6 +46,7 @@ const (
 	defDBSSLCert     = ""
 	defDBSSLKey      = ""
 	defDBSSLRootCert = ""
+	defDBDriverName  = "postgres" // "postgres" or "cloudsqlpostgres"
 
 	envZipkinV2URL   = "QS_ZIPKIN_V2_URL"
 	envServiceName   = "QS_SERVICE_NAME"
@@ -62,6 +63,7 @@ const (
 	envDBSSLCert     = "QS_DB_SSL_CERT"
 	envDBSSLKey      = "QS_DB_SSL_KEY"
 	envDBSSLRootCert = "QS_DB_SSL_ROOT_CERT"
+	envDBDriverName  = "QS_DB_DRIVER_NAME"
 )
 
 type config struct {
@@ -141,6 +143,7 @@ func loadConfig(logger log.Logger) (cfg config) {
 		SSLCert:     env(envDBSSLCert, defDBSSLCert),
 		SSLKey:      env(envDBSSLKey, defDBSSLKey),
 		SSLRootCert: env(envDBSSLRootCert, defDBSSLRootCert),
+		DriverName:  env(envDBDriverName, defDBDriverName),
 	}
 	return cfg
 }
