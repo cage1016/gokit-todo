@@ -1,0 +1,9 @@
+steps:
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args:
+      - -exc
+      - |
+        curl -d '{"branchName":"master"}' -X POST -H "Content-type: application/json" \
+          -H "Authorization: Bearer $(gcloud config config-helper --format='value(credential.access_token)')" \
+          https://cloudbuild.googleapis.com/v1/projects/gcp-10-mins/triggers/17ad33e8-aa34-495c-9230-207141a5d0c1:run
