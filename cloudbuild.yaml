@@ -1,4 +1,30 @@
 steps:
+  - name: golang
+    args:
+      - go
+      - test
+      - -v 
+      - -race 
+      - -cover 
+      - -coverprofile 
+      - coverage.txt
+      - -covermode=atomic 
+      - ./...
+
+  - name: docker/compose:1.15.0
+    args:
+      - -f
+      - docker-compose.integration.yaml
+      - up
+      - --abort-on-container-exit
+
+  - name: docker/compose:1.15.0
+    args:
+      - -f
+      - docker-compose.e2e.yaml
+      - up
+      - --abort-on-container-exit
+
   - name: gcr.io/cloud-builders/gcloud
     entrypoint: bash
     args:
